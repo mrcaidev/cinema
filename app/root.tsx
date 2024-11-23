@@ -13,7 +13,7 @@ import "./global.css";
 
 export function Layout({ children }: PropsWithChildren) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -21,6 +21,18 @@ export function Layout({ children }: PropsWithChildren) {
         <meta
           name="description"
           content="Watch videos together with your family and friends, share one playlist and chat in real time."
+        />
+        <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+          dangerouslySetInnerHTML={{
+            __html: `
+              const storedTheme = localStorage.getItem("theme");
+              const isDarkSystem = matchMedia("(prefers-color-scheme: dark)").matches;
+              if (storedTheme === "dark" || (!storedTheme && isDarkSystem)) {
+                document.documentElement.classList.add("dark");
+              }
+            `,
+          }}
         />
         <Meta />
         <Links />
