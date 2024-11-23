@@ -1,3 +1,4 @@
+import "@fontsource-variable/nunito";
 import type { PropsWithChildren } from "react";
 import {
   Links,
@@ -24,7 +25,7 @@ export function Layout({ children }: PropsWithChildren) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="bg-background text-foreground font-sans antialiased">
         {children}
         <ScrollRestoration />
         <Scripts />
