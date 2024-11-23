@@ -1,0 +1,7 @@
+.react-router
+.vscode
+build
+node_modules
+.env*
+!.env.example
+*.tsbuildinfo
