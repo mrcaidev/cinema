@@ -9,8 +9,8 @@ import {
   isRouteErrorResponse,
 } from "react-router";
 import type { Route } from "./+types/root";
+import { Toaster } from "./components/ui/toaster";
 import "./global.css";
-import { Header } from "./components/header";
 
 export function Layout({ children }: PropsWithChildren) {
   return (
@@ -24,7 +24,7 @@ export function Layout({ children }: PropsWithChildren) {
           content="Watch videos together with your family and friends, share one playlist and chat in real time."
         />
         <script
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Safe.
           dangerouslySetInnerHTML={{
             __html: `
               const storedTheme = localStorage.getItem("theme");
@@ -39,16 +39,16 @@ export function Layout({ children }: PropsWithChildren) {
         <Links />
       </head>
       <body className="bg-background text-foreground font-sans antialiased">
-        <Header />
         {children}
         <ScrollRestoration />
         <Scripts />
+        <Toaster />
       </body>
     </html>
   );
 }
 
-export default function App() {
+export default function Root() {
   return <Outlet />;
 }
 

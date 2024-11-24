@@ -16,6 +16,6 @@
     "ignore": ["pnpm-lock.yaml"]
   },
   "organizeImports": {
-    "enabled": true
+    "enabled": false
   }
 }
