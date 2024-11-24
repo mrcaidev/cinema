@@ -7,8 +7,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { User } from "@/types";
-import { LifeBuoyIcon, LogOutIcon, SettingsIcon } from "lucide-react";
+import { LifeBuoyIcon, SettingsIcon } from "lucide-react";
 import { Link } from "react-router";
+import { LogOutButton } from "./log-out-button";
 
 type Props = {
   user: User;
@@ -44,12 +45,7 @@ export function UserMenu({ user }: Props) {
           </a>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild className="cursor-pointer">
-          <Link to="/settings">
-            <LogOutIcon />
-            Log out
-          </Link>
-        </DropdownMenuItem>
+        <LogOutButton />
       </DropdownMenuContent>
     </DropdownMenu>
   );
