@@ -21,7 +21,7 @@ export function ThemeToggle() {
           <MoonIcon className="hidden dark:inline" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent align="end">
         <DropdownMenuItem onSelect={setLight} className="cursor-pointer">
           <SunIcon />
           Light

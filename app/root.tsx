@@ -10,6 +10,7 @@ import {
 } from "react-router";
 import type { Route } from "./+types/root";
 import "./global.css";
+import { Header } from "./components/header";
 
 export function Layout({ children }: PropsWithChildren) {
   return (
@@ -38,6 +39,7 @@ export function Layout({ children }: PropsWithChildren) {
         <Links />
       </head>
       <body className="bg-background text-foreground font-sans antialiased">
+        <Header />
         {children}
         <ScrollRestoration />
         <Scripts />
