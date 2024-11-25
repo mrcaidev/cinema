@@ -54,7 +54,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   const meCookie = await commitMeSession(meSession);
 
-  return redirect("/", { headers: { "Set-Cookie": meCookie } });
+  return redirect("/", { headers: { "Set-Cookie": meCookie } }) as never;
 }
 
 export function meta() {
@@ -67,7 +67,7 @@ export default function LogInPage() {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (data && "error" in data) {
+    if (data?.error) {
       toast({ variant: "destructive", description: data.error });
     }
   }, [data, toast]);

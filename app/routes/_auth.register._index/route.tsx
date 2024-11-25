@@ -64,7 +64,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   return redirect("/register/verify", {
     headers: { "Set-Cookie": emailVerificationCookie },
-  });
+  }) as never;
 }
 
 export default function SendOtpPage() {
@@ -73,7 +73,7 @@ export default function SendOtpPage() {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (data && "error" in data) {
+    if (data?.error) {
       toast({ variant: "destructive", description: data.error });
     }
   }, [data, toast]);

@@ -50,7 +50,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   const { slug } = output;
 
-  return redirect(`/room/${slug}/welcome`);
+  return redirect(`/room/${slug}/welcome`) as never;
 }
 
 export default function JoinRoomPage() {
@@ -59,7 +59,7 @@ export default function JoinRoomPage() {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (data && "error" in data) {
+    if (data?.error) {
       toast({ variant: "destructive", description: data.error });
     }
   }, [data, toast]);

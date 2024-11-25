@@ -74,7 +74,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   await verifyEmailVerificationById(emailVerificationId);
 
-  return redirect("/register/details");
+  return redirect("/register/details") as never;
 }
 
 export default function VerifyOtpPage() {
@@ -83,7 +83,7 @@ export default function VerifyOtpPage() {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (data && "error" in data) {
+    if (data?.error) {
       toast({ variant: "destructive", description: data.error });
     }
   }, [data, toast]);

@@ -11,7 +11,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   const isLoggedIn = meSession.has("id");
 
   if (isLoggedIn) {
-    return redirect("/");
+    return redirect("/") as never;
   }
 
   return;

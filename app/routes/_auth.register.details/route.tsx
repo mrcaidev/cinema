@@ -100,7 +100,7 @@ export async function action({ request }: Route.ActionArgs) {
       ["Set-Cookie", meCookie],
       ["Set-Cookie", emailVerificationCookie],
     ]),
-  });
+  }) as never;
 }
 
 export default function FillDetailsPage() {
@@ -109,7 +109,7 @@ export default function FillDetailsPage() {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (data && "error" in data) {
+    if (data?.error) {
       toast({ variant: "destructive", description: data.error });
     }
   }, [data, toast]);
