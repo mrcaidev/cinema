@@ -148,7 +148,11 @@ export default function JoinRoomPage() {
             </Link>
           </Button>
           <Button form="join-room-form" disabled={state === "submitting"}>
-            {state === "submitting" ? <Loader2Icon /> : <UsersRoundIcon />}
+            {state === "submitting" ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              <UsersRoundIcon />
+            )}
             Join
           </Button>
         </CardFooter>

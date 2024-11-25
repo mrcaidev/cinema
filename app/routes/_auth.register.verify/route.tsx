@@ -119,7 +119,11 @@ export default function VerifyOtpPage() {
           disabled={state === "submitting"}
           className="w-full"
         >
-          {state === "submitting" ? <Loader2Icon /> : <ShieldCheckIcon />}
+          {state === "submitting" ? (
+            <Loader2Icon className="animate-spin" />
+          ) : (
+            <ShieldCheckIcon />
+          )}
           Verify OTP
         </Button>
       </Form>

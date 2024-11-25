@@ -14,7 +14,11 @@ export function LogOutButton() {
         onClick={() => submit(null, { method: "POST", action: "/logout" })}
         className="w-full"
       >
-        {state === "submitting" ? <Loader2Icon /> : <LogOutIcon />}
+        {state === "submitting" ? (
+          <Loader2Icon className="animate-spin" />
+        ) : (
+          <LogOutIcon />
+        )}
         Log out
       </button>
     </DropdownMenuItem>

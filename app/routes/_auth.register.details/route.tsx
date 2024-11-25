@@ -165,7 +165,11 @@ export default function FillDetailsPage() {
           disabled={state === "submitting"}
           className="w-full"
         >
-          {state === "submitting" ? <Loader2Icon /> : <FlagIcon />}
+          {state === "submitting" ? (
+            <Loader2Icon className="animate-spin" />
+          ) : (
+            <FlagIcon />
+          )}
           Finish
         </Button>
       </Form>

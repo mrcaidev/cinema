@@ -109,7 +109,11 @@ export default function LogInPage() {
           disabled={state === "submitting"}
           className="w-full"
         >
-          {state === "submitting" ? <Loader2Icon /> : <LogInIcon />}
+          {state === "submitting" ? (
+            <Loader2Icon className="animate-spin" />
+          ) : (
+            <LogInIcon />
+          )}
           Log in
         </Button>
       </Form>

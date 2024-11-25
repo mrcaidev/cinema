@@ -119,7 +119,11 @@ export default function NewRoomPage() {
             </Link>
           </Button>
           <Button form="new-room-form" disabled={state === "submitting"}>
-            {state === "submitting" ? <Loader2Icon /> : <PlusIcon />}
+            {state === "submitting" ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              <PlusIcon />
+            )}
             Create
           </Button>
         </CardFooter>

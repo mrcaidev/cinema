@@ -102,7 +102,11 @@ export default function SendOtpPage() {
           disabled={state === "submitting"}
           className="w-full"
         >
-          {state === "submitting" ? <Loader2Icon /> : <MailIcon />}
+          {state === "submitting" ? (
+            <Loader2Icon className="animate-spin" />
+          ) : (
+            <MailIcon />
+          )}
           Send OTP
         </Button>
       </Form>
