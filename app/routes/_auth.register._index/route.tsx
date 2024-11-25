@@ -19,7 +19,7 @@ export default function Page() {
 
   return (
     <div className="min-w-72">
-      <h1 className="mb-2 text-2xl font-bold">Welcome Aboard 👋</h1>
+      <h1 className="mb-1 text-2xl font-bold">Welcome Aboard 👋</h1>
       <p className="mb-4 text-sm text-muted-foreground">
         Register to fully enjoy all features
       </p>

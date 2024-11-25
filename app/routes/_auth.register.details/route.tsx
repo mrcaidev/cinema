@@ -19,7 +19,7 @@ export default function Page() {
 
   return (
     <div className="min-w-72">
-      <h1 className="mb-2 text-2xl font-bold">One Last Step 🎌</h1>
+      <h1 className="mb-1 text-2xl font-bold">One Last Step 🎌</h1>
       <p className="mb-4 text-sm text-muted-foreground">
         Tell us more about you
       </p>

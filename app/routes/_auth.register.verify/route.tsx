@@ -23,7 +23,7 @@ export default function Page() {
 
   return (
     <div className="min-w-72">
-      <h1 className="mb-2 text-2xl font-bold">Verify Email 📮</h1>
+      <h1 className="mb-1 text-2xl font-bold">Verify Email 📮</h1>
       <p className="mb-4 text-sm text-muted-foreground">
         Enter the OTP sent to your email inbox
       </p>
