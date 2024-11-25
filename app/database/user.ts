@@ -22,6 +22,16 @@ export async function hasUserByEmail(email: string) {
   return count > 0;
 }
 
+export async function findUserWithPasswordByEmail(email: string) {
+  const doc = await collection.findOne({ email, deletedTime: null });
+
+  if (!doc) {
+    return null;
+  }
+
+  return { ...normalize(doc), passwordHash: doc.passwordHash };
+}
+
 type CreateUserDto = {
   email: string;
   passwordHash: string;
