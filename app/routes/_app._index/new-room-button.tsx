@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { Link, useLoaderData } from "react-router";
-import type { loader } from "./loader";
+import type { loader } from "./route";
 
 export function NewRoomButton() {
   const me = useLoaderData<typeof loader>();

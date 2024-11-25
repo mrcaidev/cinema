@@ -1,12 +1,12 @@
 import { createCookieSessionStorage } from "react-router";
 
 export const {
-  commitSession: commitUserSession,
-  destroySession: destroyUserSession,
-  getSession: getUserSession,
+  commitSession: commitMeSession,
+  destroySession: destroyMeSession,
+  getSession: getMeSession,
 } = createCookieSessionStorage<{ id: string }>({
   cookie: {
-    name: "user",
+    name: "me",
     secrets: [process.env.SESSION_SECRET],
     httpOnly: true,
     maxAge: 7 * 24 * 60 * 60, // 7 days

@@ -1,1 +1,3 @@
-export { meta } from "./meta";
+export function meta() {
+  return [{ title: "Register | Cinema" }];
+}

@@ -1,9 +1,23 @@
 import { Button } from "@/components/ui/button";
+import { getMeSession } from "@/utils/session";
 import { ChevronLeftIcon } from "lucide-react";
-import { Link, Outlet } from "react-router";
+import { Link, Outlet, redirect } from "react-router";
+import type { Route } from "./+types/route";
 import bg from "./bg.webp";
 
-export default function Layout() {
+export async function loader({ request }: Route.LoaderArgs) {
+  const meSession = await getMeSession(request.headers.get("Cookie"));
+
+  const isLoggedIn = meSession.has("id");
+
+  if (isLoggedIn) {
+    return redirect("/");
+  }
+
+  return;
+}
+
+export default function AuthLayout() {
   return (
     <main className="grid lg:grid-cols-2 relative min-h-screen">
       <Button
@@ -50,5 +64,3 @@ export default function Layout() {
     </main>
   );
 }
-
-export { loader } from "./loader";

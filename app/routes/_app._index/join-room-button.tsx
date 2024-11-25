@@ -10,11 +10,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import type { action } from "@/routes/_app.room.join/route";
 import { Loader2Icon, UsersRoundIcon, XIcon } from "lucide-react";
 import { useFetcher } from "react-router";
 
 export function JoinRoomButton() {
-  const { Form, state } = useFetcher();
+  const { Form, state } = useFetcher<typeof action>();
 
   return (
     <Dialog>
@@ -31,7 +32,7 @@ export function JoinRoomButton() {
             Paste the link that your friend has shared with you.
           </DialogDescription>
         </DialogHeader>
-        <Form method="POST" action="/room/join" id="join-room">
+        <Form method="POST" action="/room/join" id="join-room-form">
           <label htmlFor="room" className="sr-only">
             Room link
           </label>
@@ -50,7 +51,7 @@ export function JoinRoomButton() {
               Cancel
             </Button>
           </DialogClose>
-          <Button form="join-room" disabled={state === "submitting"}>
+          <Button form="join-room-form" disabled={state === "submitting"}>
             {state === "submitting" ? <Loader2Icon /> : <UsersRoundIcon />}
             Join
           </Button>

@@ -2,12 +2,109 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { FlagIcon } from "lucide-react";
+import { findEmailVerificationById } from "@/database/email-verification";
+import { createUser } from "@/database/user";
+import {
+  commitMeSession,
+  destroyEmailVerificationSession,
+  getEmailVerificationSession,
+  getMeSession,
+} from "@/utils/session";
+import { hash } from "bcrypt";
+import { FlagIcon, Loader2Icon } from "lucide-react";
 import { useEffect } from "react";
-import { useFetcher } from "react-router";
+import { data, redirect, useFetcher } from "react-router";
+import * as v from "valibot";
+import type { Route } from "./+types/route";
 
-export default function Page() {
-  const { Form, data, state } = useFetcher();
+const schema = v.object({
+  password: v.pipe(v.string(), v.minLength(8), v.maxLength(20)),
+  confirmPassword: v.pipe(v.string(), v.minLength(8), v.maxLength(20)),
+  nickname: v.union([
+    v.pipe(v.string(), v.minLength(2), v.maxLength(20)),
+    v.pipe(
+      v.literal(""),
+      v.transform(() => null),
+    ),
+  ]),
+});
+
+export async function action({ request }: Route.ActionArgs) {
+  const formData = await request.formData();
+
+  const { success, issues, output } = await v.safeParseAsync(
+    schema,
+    Object.fromEntries(formData),
+  );
+
+  if (!success) {
+    return data({ error: issues[0].message }, { status: 400 });
+  }
+
+  const { password, confirmPassword, nickname } = output;
+
+  if (password !== confirmPassword) {
+    return data({ error: "Passwords do not match" }, { status: 400 });
+  }
+
+  const emailVerificationSession = await getEmailVerificationSession(
+    request.headers.get("Cookie"),
+  );
+
+  const emailVerificationId = emailVerificationSession.get("id");
+
+  if (!emailVerificationId) {
+    return data({ error: "Please send OTP first" }, { status: 403 });
+  }
+
+  const emailVerification =
+    await findEmailVerificationById(emailVerificationId);
+
+  if (!emailVerification) {
+    return data(
+      { error: "This verification record does not exist" },
+      { status: 404 },
+    );
+  }
+
+  if (!emailVerification.verifiedTime) {
+    return data(
+      { error: "This email has not yet been verified" },
+      { status: 403 },
+    );
+  }
+
+  const { email } = emailVerification;
+
+  const passwordHash = await hash(password, 10);
+
+  const user = await createUser({
+    email,
+    nickname,
+    avatarUrl: null,
+    passwordHash,
+  });
+
+  const meSession = await getMeSession(request.headers.get("Cookie"));
+
+  meSession.set("id", user.id);
+
+  const meCookie = await commitMeSession(meSession);
+
+  const emailVerificationCookie = await destroyEmailVerificationSession(
+    emailVerificationSession,
+  );
+
+  return redirect("/", {
+    headers: new Headers([
+      ["Set-Cookie", meCookie],
+      ["Set-Cookie", emailVerificationCookie],
+    ]),
+  });
+}
+
+export default function FillDetailsPage() {
+  const { Form, data, state } = useFetcher<typeof action>();
 
   const { toast } = useToast();
 
@@ -68,12 +165,10 @@ export default function Page() {
           disabled={state === "submitting"}
           className="w-full"
         >
-          <FlagIcon />
+          {state === "submitting" ? <Loader2Icon /> : <FlagIcon />}
           Finish
         </Button>
       </Form>
     </div>
   );
 }
-
-export { action } from "./action";

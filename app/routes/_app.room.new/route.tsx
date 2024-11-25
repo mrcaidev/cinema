@@ -1,5 +1,7 @@
-export default function Page() {
-  return <h1>New room page</h1>;
+export function meta() {
+  return [{ title: "New Room | Cinema" }];
 }
 
-export { meta } from "./meta";
+export default function NewRoomPage() {
+  return <h1>New room page</h1>;
+}

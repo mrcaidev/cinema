@@ -9,13 +9,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LifeBuoyIcon, LogInIcon, SettingsIcon } from "lucide-react";
 import { Link, useLoaderData } from "react-router";
-import type { loader } from "../loader";
+import type { loader } from "../route";
 import { LogOutButton } from "./log-out-button";
 
 export function UserMenu() {
-  const user = useLoaderData<typeof loader>();
+  const me = useLoaderData<typeof loader>();
 
-  if (!user) {
+  if (!me) {
     return (
       <Button
         variant="ghost"
@@ -35,16 +35,16 @@ export function UserMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarImage src={user.avatarUrl ?? undefined} alt="" />
+          <AvatarImage src={me.avatarUrl ?? undefined} alt="" />
           <AvatarFallback className="uppercase">
-            {user.nickname?.[0] ?? user.email[0]}
+            {me.nickname?.[0] ?? me.email[0]}
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-48">
         <div className="space-y-0.5 px-2 py-1">
-          <p className="font-medium">{user.nickname ?? "User"}</p>
-          <p className="text-sm text-muted-foreground">{user.email}</p>
+          <p className="font-medium">{me.nickname ?? "User"}</p>
+          <p className="text-sm text-muted-foreground">{me.email}</p>
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild className="cursor-pointer">

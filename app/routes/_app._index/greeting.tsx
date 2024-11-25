@@ -1,6 +1,6 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLoaderData } from "react-router";
-import type { loader } from "../_app/loader";
+import type { loader } from "./route";
 
 export function Greeting() {
   const me = useLoaderData<typeof loader>();
@@ -10,7 +10,7 @@ export function Greeting() {
     emoji: "👋",
   });
 
-  useLayoutEffect(() => setGreeting(getGreeting()), []);
+  useEffect(() => setGreeting(localizeGreeting()), []);
 
   return (
     <p className="text-2xl font-medium">
@@ -22,7 +22,7 @@ export function Greeting() {
   );
 }
 
-function getGreeting() {
+function localizeGreeting() {
   const hour = new Date().getHours();
 
   if (hour < 6) {

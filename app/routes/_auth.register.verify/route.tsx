@@ -6,12 +6,79 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useToast } from "@/components/ui/use-toast";
-import { ShieldCheckIcon } from "lucide-react";
+import {
+  findEmailVerificationById,
+  verifyEmailVerificationById,
+} from "@/database/email-verification";
+import { getEmailVerificationSession } from "@/utils/session";
+import { Loader2Icon, ShieldCheckIcon } from "lucide-react";
 import { useEffect } from "react";
-import { useFetcher } from "react-router";
+import { data, redirect, useFetcher } from "react-router";
+import * as v from "valibot";
+import type { Route } from "./+types/route";
 
-export default function Page() {
-  const { Form, data, state } = useFetcher();
+const schema = v.object({
+  otp: v.pipe(v.string(), v.regex(/^\d{6}$/)),
+});
+
+export async function action({ request }: Route.ActionArgs) {
+  const formData = await request.formData();
+
+  const { success, issues, output } = await v.safeParseAsync(
+    schema,
+    Object.fromEntries(formData),
+  );
+
+  if (!success) {
+    return data({ error: issues[0].message }, { status: 400 });
+  }
+
+  const { otp } = output;
+
+  const emailVerificationSession = await getEmailVerificationSession(
+    request.headers.get("Cookie"),
+  );
+
+  const emailVerificationId = emailVerificationSession.get("id");
+
+  if (!emailVerificationId) {
+    return data({ error: "Please send OTP first" }, { status: 403 });
+  }
+
+  const emailVerification =
+    await findEmailVerificationById(emailVerificationId);
+
+  if (!emailVerification) {
+    return data(
+      { error: "This verification record does not exist" },
+      { status: 404 },
+    );
+  }
+
+  if (emailVerification.verifiedTime) {
+    return data(
+      { error: "This email has already been verified" },
+      { status: 409 },
+    );
+  }
+
+  if (otp !== emailVerification.otp) {
+    return data({ error: "OTP is incorrect" }, { status: 400 });
+  }
+
+  const elapsedTime = Date.now() - emailVerification.createdTime;
+
+  if (elapsedTime > 10 * 60 * 1000) {
+    return data({ error: "OTP has expired" }, { status: 422 });
+  }
+
+  await verifyEmailVerificationById(emailVerificationId);
+
+  return redirect("/register/details");
+}
+
+export default function VerifyOtpPage() {
+  const { Form, data, state } = useFetcher<typeof action>();
 
   const { toast } = useToast();
 
@@ -52,12 +119,10 @@ export default function Page() {
           disabled={state === "submitting"}
           className="w-full"
         >
-          <ShieldCheckIcon />
+          {state === "submitting" ? <Loader2Icon /> : <ShieldCheckIcon />}
           Verify OTP
         </Button>
       </Form>
     </div>
   );
 }
-
-export { action } from "./action";
