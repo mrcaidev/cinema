@@ -7,26 +7,19 @@ type Doc = Omit<User, "id"> & { passwordHash: string };
 const collection = db.collection<Doc>("users");
 
 export async function findUserById(id: string) {
-  const doc = await collection.findOne({
-    _id: new ObjectId(id),
-    deletedTime: null,
-  });
+  const doc = await collection.findOne({ _id: new ObjectId(id) });
 
-  if (!doc) {
+  if (!doc || doc.deletedTime) {
     return null;
   }
 
   return normalize(doc);
 }
 
-export async function findUserByEmail(email: string) {
-  const doc = await collection.findOne({ email, deletedTime: null });
+export async function hasUserByEmail(email: string) {
+  const count = await collection.countDocuments({ email, deletedTime: null });
 
-  if (!doc) {
-    return null;
-  }
-
-  return normalize(doc);
+  return count > 0;
 }
 
 type CreateUserDto = {

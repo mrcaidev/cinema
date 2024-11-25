@@ -1,5 +1,5 @@
 import { createEmailVerification } from "@/database/email-verification";
-import { findUserByEmail } from "@/database/user";
+import { hasUserByEmail } from "@/database/user";
 import { sendEmail } from "@/utils/email";
 import {
   commitEmailVerificationSession,
@@ -26,9 +26,9 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const { email } = output;
 
-  const conflictedUser = await findUserByEmail(email);
+  const isEmailConflicted = await hasUserByEmail(email);
 
-  if (conflictedUser) {
+  if (isEmailConflicted) {
     return data(
       { error: "This email has already been registered." },
       { status: 409 },

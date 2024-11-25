@@ -7,9 +7,7 @@ type Doc = Omit<EmailVerification, "id">;
 const collection = db.collection<Doc>("emailVerifications");
 
 export async function findEmailVerificationById(id: string) {
-  const doc = await collection.findOne({
-    _id: new ObjectId(id),
-  });
+  const doc = await collection.findOne({ _id: new ObjectId(id) });
 
   if (!doc) {
     return null;
