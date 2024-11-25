@@ -1,7 +1,129 @@
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
+import { createRoom } from "@/database/room";
+import { loadMe } from "@/loaders/me";
+import { hash } from "bcrypt";
+import { ChevronLeftIcon, Loader2Icon, PlusIcon } from "lucide-react";
+import { useEffect } from "react";
+import { data, Link, redirect, useFetcher, useLoaderData } from "react-router";
+import * as v from "valibot";
+import type { Route } from "./+types/route";
+
+export async function loader({ request }: Route.LoaderArgs) {
+  return await loadMe(request, { strict: true });
+}
+
+const schema = v.object({
+  name: v.pipe(v.string(), v.minLength(1), v.maxLength(30)),
+  password: v.union([
+    v.pipe(v.string(), v.minLength(2), v.maxLength(20)),
+    v.pipe(
+      v.literal(""),
+      v.transform(() => null),
+    ),
+  ]),
+});
+
+export async function action({ request }: Route.ActionArgs) {
+  const formData = await request.formData();
+
+  const { success, issues, output } = await v.safeParseAsync(
+    schema,
+    Object.fromEntries(formData),
+  );
+
+  if (!success) {
+    return data({ error: issues[0].message }, { status: 400 });
+  }
+
+  const { name, password } = output;
+
+  const me = await loadMe(request, { strict: true });
+
+  const passwordHash = password ? await hash(password, 10) : null;
+
+  const room = await createRoom({ name, host: me, passwordHash });
+
+  return redirect(`/room/${room.slug}/welcome`) as never;
+}
+
 export function meta() {
   return [{ title: "New Room | Cinema" }];
 }
 
 export default function NewRoomPage() {
-  return <h1>New room page</h1>;
+  const me = useLoaderData<typeof loader>();
+
+  const { Form, data, state } = useFetcher();
+
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (data?.error) {
+      toast({ variant: "destructive", description: data.error });
+    }
+  }, [data, toast]);
+
+  return (
+    <div className="grid place-items-center min-h-[calc(100vh-80px)]">
+      <Card className="-translate-y-16 animate-zoom-in">
+        <CardHeader>
+          <CardTitle>Create a Room</CardTitle>
+          <CardDescription>
+            Host a cinema room and invite your family and friends
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form method="POST" className="space-y-4" id="new-room-form">
+            <div className="space-y-1">
+              <Label htmlFor="name" required>
+                Name
+              </Label>
+              <Input
+                name="name"
+                defaultValue={me.nickname ? `${me.nickname}'s Room` : "My Room"}
+                placeholder="1-30 characters"
+                required
+                minLength={1}
+                maxLength={30}
+                id="name"
+              />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                name="password"
+                placeholder="Optional, 2-20 characters"
+                minLength={2}
+                maxLength={20}
+                id="password"
+              />
+            </div>
+          </Form>
+        </CardContent>
+        <CardFooter className="justify-between">
+          <Button variant="outline" asChild>
+            <Link to="/">
+              <ChevronLeftIcon />
+              Back
+            </Link>
+          </Button>
+          <Button form="new-room-form" disabled={state === "submitting"}>
+            {state === "submitting" ? <Loader2Icon /> : <PlusIcon />}
+            Create
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
+  );
 }
