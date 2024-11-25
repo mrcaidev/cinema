@@ -9,6 +9,12 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  addMemberToRoomById,
+  findRoomWithCredentialsBySlug,
+} from "@/database/room";
+import { loadMe } from "@/loaders/me";
+import { compare } from "bcrypt";
 import { ChevronLeftIcon, Loader2Icon, UsersRoundIcon } from "lucide-react";
 import { useEffect } from "react";
 import { data, Link, redirect, useFetcher } from "react-router";
@@ -48,7 +54,53 @@ export async function action({ request }: Route.ActionArgs) {
     return data({ error: issues[0].message }, { status: 400 });
   }
 
-  const { slug } = output;
+  const { slug, password } = output;
+
+  const roomWithCredentials = await findRoomWithCredentialsBySlug(slug);
+
+  if (!roomWithCredentials) {
+    return data({ error: "This room does not exist" }, { status: 404 });
+  }
+
+  const {
+    id: roomId,
+    host,
+    admins,
+    members,
+    passwordHash,
+  } = roomWithCredentials;
+
+  const me = await loadMe(request);
+
+  if (me && [host, ...admins, ...members].some((u) => u.id === me.id)) {
+    return redirect(`/room/${slug}`) as never;
+  }
+
+  if (!passwordHash) {
+    return redirect(`/room/${slug}/welcome`) as never;
+  }
+
+  if (!password) {
+    return data(
+      {
+        error:
+          "This room is protected with password. Did you copy the full link?",
+      },
+      { status: 403 },
+    );
+  }
+
+  const isCorrectPassword = await compare(password, passwordHash);
+
+  if (!isCorrectPassword) {
+    return data({ error: "Password is incorrect" }, { status: 403 });
+  }
+
+  if (!me) {
+    return redirect(`/room/${slug}/welcome`) as never;
+  }
+
+  await addMemberToRoomById(roomId, me);
 
   return redirect(`/room/${slug}/welcome`) as never;
 }

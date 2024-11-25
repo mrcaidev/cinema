@@ -35,7 +35,7 @@ export async function action({ request }: Route.ActionArgs) {
   if (!userWithCredentials) {
     return data(
       { error: "This email has not yet been registered." },
-      { status: 400 },
+      { status: 404 },
     );
   }
 
