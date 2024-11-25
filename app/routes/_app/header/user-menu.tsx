@@ -22,7 +22,7 @@ export function UserMenu({ user }: Props) {
         <Avatar>
           <AvatarImage src={user.avatarUrl ?? undefined} alt="" />
           <AvatarFallback className="uppercase">
-            {user.nickname ?? user.email[0]}
+            {user.nickname?.[0] ?? user.email[0]}
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
