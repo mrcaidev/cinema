@@ -10,7 +10,7 @@ export function Logo() {
         height={24}
         className="size-6"
       />
-      <span className="text-lg font-medium">Cinema</span>
+      <span className="sr-only sm:not-sr-only text-lg font-medium">Cinema</span>
     </Link>
   );
 }
