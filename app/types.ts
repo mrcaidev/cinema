@@ -8,6 +8,7 @@ export type User = {
 };
 
 export type UserWithCredentials = User & {
+  passwordSalt: string;
   passwordHash: string;
 };
 
@@ -33,5 +34,6 @@ export type Room = {
 };
 
 export type RoomWithCredentials = Room & {
+  passwordSalt: string | null;
   passwordHash: string | null;
 };

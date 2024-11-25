@@ -34,9 +34,10 @@ export async function findUserWithCredentialsByEmail(email: string) {
 
 type CreateUserDto = {
   email: string;
-  passwordHash: string;
   nickname: string | null;
   avatarUrl: string | null;
+  passwordSalt: string;
+  passwordHash: string;
 };
 
 export async function createUser(dto: CreateUserDto) {
@@ -46,6 +47,7 @@ export async function createUser(dto: CreateUserDto) {
     avatarUrl: dto.avatarUrl,
     createdTime: Date.now(),
     deletedTime: null,
+    passwordSalt: dto.passwordSalt,
     passwordHash: dto.passwordHash,
   };
 
@@ -61,7 +63,7 @@ function toUserWithCredentials(doc: WithId<Doc>): UserWithCredentials {
 }
 
 function toUser(doc: WithId<Doc>): User {
-  const { _id, passwordHash, ...rest } = doc;
+  const { _id, passwordSalt, passwordHash, ...rest } = doc;
 
   return { id: _id.toHexString(), ...rest };
 }

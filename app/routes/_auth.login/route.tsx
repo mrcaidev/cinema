@@ -3,8 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { findUserWithCredentialsByEmail } from "@/database/user";
+import { hash } from "@/utils/salt";
 import { commitMeSession, getMeSession } from "@/utils/session";
-import { compare } from "bcrypt";
 import { Loader2Icon, LogInIcon } from "lucide-react";
 import { useEffect } from "react";
 import { data, Link, redirect, useFetcher } from "react-router";
@@ -39,18 +39,17 @@ export async function action({ request }: Route.ActionArgs) {
     );
   }
 
-  const isCorrectPassword = await compare(
-    password,
-    userWithCredentials.passwordHash,
-  );
+  const { id: userId, passwordSalt, passwordHash } = userWithCredentials;
 
-  if (!isCorrectPassword) {
+  const attemptHash = await hash(password, passwordSalt);
+
+  if (attemptHash !== passwordHash) {
     return data({ error: "Password is incorrect" }, { status: 401 });
   }
 
   const meSession = await getMeSession(request.headers.get("Cookie"));
 
-  meSession.set("id", userWithCredentials.id);
+  meSession.set("id", userId);
 
   const meCookie = await commitMeSession(meSession);
 

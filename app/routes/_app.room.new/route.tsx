@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { createRoom } from "@/database/room";
 import { loadMe } from "@/loaders/me";
-import { hash } from "bcrypt";
+import { generateSalt, hash } from "@/utils/salt";
 import { ChevronLeftIcon, Loader2Icon, PlusIcon } from "lucide-react";
 import { useEffect } from "react";
 import { data, Link, redirect, useFetcher, useLoaderData } from "react-router";
@@ -50,9 +50,15 @@ export async function action({ request }: Route.ActionArgs) {
 
   const me = await loadMe(request, { strict: true });
 
-  const passwordHash = password ? await hash(password, 10) : null;
+  let passwordSalt: string | null = null;
+  let passwordHash: string | null = null;
 
-  const room = await createRoom({ name, host: me, passwordHash });
+  if (password) {
+    passwordSalt = generateSalt();
+    passwordHash = await hash(password, passwordSalt);
+  }
+
+  const room = await createRoom({ name, host: me, passwordSalt, passwordHash });
 
   return redirect(`/room/${room.slug}/welcome`) as never;
 }

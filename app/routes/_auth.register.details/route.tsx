@@ -4,13 +4,13 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { findEmailVerificationById } from "@/database/email-verification";
 import { createUser } from "@/database/user";
+import { generateSalt, hash } from "@/utils/salt";
 import {
   commitMeSession,
   destroyEmailVerificationSession,
   getEmailVerificationSession,
   getMeSession,
 } from "@/utils/session";
-import { hash } from "bcrypt";
 import { FlagIcon, Loader2Icon } from "lucide-react";
 import { useEffect } from "react";
 import { data, redirect, useFetcher } from "react-router";
@@ -76,12 +76,14 @@ export async function action({ request }: Route.ActionArgs) {
 
   const { email } = emailVerification;
 
-  const passwordHash = await hash(password, 10);
+  const passwordSalt = generateSalt();
+  const passwordHash = await hash(password, passwordSalt);
 
   const user = await createUser({
     email,
     nickname,
     avatarUrl: null,
+    passwordSalt,
     passwordHash,
   });
 

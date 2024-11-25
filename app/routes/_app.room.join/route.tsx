@@ -14,7 +14,7 @@ import {
   findRoomWithCredentialsBySlug,
 } from "@/database/room";
 import { loadMe } from "@/loaders/me";
-import { compare } from "bcrypt";
+import { hash } from "@/utils/salt";
 import { ChevronLeftIcon, Loader2Icon, UsersRoundIcon } from "lucide-react";
 import { useEffect } from "react";
 import { data, Link, redirect, useFetcher } from "react-router";
@@ -67,6 +67,7 @@ export async function action({ request }: Route.ActionArgs) {
     host,
     admins,
     members,
+    passwordSalt,
     passwordHash,
   } = roomWithCredentials;
 
@@ -76,7 +77,7 @@ export async function action({ request }: Route.ActionArgs) {
     return redirect(`/room/${slug}`) as never;
   }
 
-  if (!passwordHash) {
+  if (!passwordSalt || !passwordHash) {
     return redirect(`/room/${slug}/welcome`) as never;
   }
 
@@ -90,9 +91,9 @@ export async function action({ request }: Route.ActionArgs) {
     );
   }
 
-  const isCorrectPassword = await compare(password, passwordHash);
+  const attemptHash = await hash(password, passwordSalt);
 
-  if (!isCorrectPassword) {
+  if (attemptHash !== passwordHash) {
     return data({ error: "Password is incorrect" }, { status: 403 });
   }
 

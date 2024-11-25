@@ -20,6 +20,7 @@ export async function findRoomWithCredentialsBySlug(slug: string) {
 type CreateRoomDto = {
   name: string;
   host: User;
+  passwordSalt: string | null;
   passwordHash: string | null;
 };
 
@@ -36,6 +37,7 @@ export async function createRoom(dto: CreateRoomDto) {
     members: [],
     createdTime: Date.now(),
     deletedTime: null,
+    passwordSalt: dto.passwordSalt,
     passwordHash: dto.passwordHash,
   };
 
@@ -65,7 +67,7 @@ function toRoomWithCredentials(doc: WithId<Doc>): RoomWithCredentials {
 }
 
 function toRoom(doc: WithId<Doc>): Room {
-  const { _id, passwordHash, ...rest } = doc;
+  const { _id, passwordSalt, passwordHash, ...rest } = doc;
 
   return { id: _id.toHexString(), ...rest };
 }

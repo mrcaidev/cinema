@@ -21,7 +21,6 @@
     "@react-router/fs-routes": "^7.0.1",
     "@react-router/node": "^7.0.1",
     "@react-router/serve": "^7.0.1",
-    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "input-otp": "^1.4.1",
