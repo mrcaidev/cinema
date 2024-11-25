@@ -4,7 +4,7 @@ import { Link } from "react-router";
 
 export function JoinRoomButton() {
   return (
-    <Button asChild>
+    <Button variant="secondary" asChild>
       <Link to="/room/join">
         <UsersRoundIcon />
         Join room

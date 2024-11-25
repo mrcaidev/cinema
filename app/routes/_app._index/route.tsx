@@ -28,9 +28,9 @@ export default function HomePage() {
     <div className="grid place-items-center min-h-[calc(100vh-80px)]">
       <div className="space-y-5 -translate-y-16">
         <Greeting />
-        <div className="flex items-center gap-3">
-          <NewRoomButton />
+        <div className="flex justify-center items-center gap-3">
           <JoinRoomButton />
+          <NewRoomButton />
         </div>
       </div>
     </div>

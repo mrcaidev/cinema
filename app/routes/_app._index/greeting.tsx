@@ -13,7 +13,7 @@ export function Greeting() {
   useEffect(() => setGreeting(localizeGreeting()), []);
 
   return (
-    <p className="text-2xl font-medium">
+    <p className="text-2xl text-center font-medium">
       {text}
       {me && `, ${me.nickname}`}
       &nbsp;

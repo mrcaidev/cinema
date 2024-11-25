@@ -7,7 +7,7 @@ export function NewRoomButton() {
   const me = useLoaderData<typeof loader>();
 
   return (
-    <Button variant="secondary" asChild>
+    <Button asChild>
       <Link to={me ? "/room/new" : "/login"}>
         <PlusIcon />
         New room
