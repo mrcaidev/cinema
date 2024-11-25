@@ -13,7 +13,7 @@ export async function findEmailVerificationById(id: string) {
     return null;
   }
 
-  return normalize(doc);
+  return toEmailVerification(doc);
 }
 
 type CreateEmailVerificationDto = {
@@ -31,7 +31,7 @@ export async function createEmailVerification(dto: CreateEmailVerificationDto) {
 
   const { insertedId } = await collection.insertOne({ ...doc });
 
-  return normalize({ _id: insertedId, ...doc });
+  return toEmailVerification({ _id: insertedId, ...doc });
 }
 
 export async function verifyEmailVerificationById(id: string) {
@@ -45,10 +45,10 @@ export async function verifyEmailVerificationById(id: string) {
     return null;
   }
 
-  return normalize(doc);
+  return toEmailVerification(doc);
 }
 
-function normalize(doc: WithId<Doc>): EmailVerification {
+function toEmailVerification(doc: WithId<Doc>): EmailVerification {
   const { _id, ...rest } = doc;
 
   return { id: _id.toHexString(), ...rest };

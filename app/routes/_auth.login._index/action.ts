@@ -1,4 +1,4 @@
-import { findUserWithPasswordByEmail } from "@/database/user";
+import { findUserWithCredentialsByEmail } from "@/database/user";
 import { commitUserSession, getUserSession } from "@/utils/session";
 import { compare } from "bcrypt";
 import { data, redirect } from "react-router";
@@ -24,16 +24,19 @@ export async function action({ request }: Route.ActionArgs) {
 
   const { email, password } = output;
 
-  const user = await findUserWithPasswordByEmail(email);
+  const userWithCredentials = await findUserWithCredentialsByEmail(email);
 
-  if (!user) {
+  if (!userWithCredentials) {
     return data(
       { error: "This email has not yet been registered." },
       { status: 400 },
     );
   }
 
-  const isCorrectPassword = await compare(password, user.passwordHash);
+  const isCorrectPassword = await compare(
+    password,
+    userWithCredentials.passwordHash,
+  );
 
   if (!isCorrectPassword) {
     return data({ error: "Password is incorrect" }, { status: 401 });
@@ -41,7 +44,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   const userSession = await getUserSession(request.headers.get("Cookie"));
 
-  userSession.set("id", user.id);
+  userSession.set("id", userWithCredentials.id);
 
   const userCookie = await commitUserSession(userSession);
 

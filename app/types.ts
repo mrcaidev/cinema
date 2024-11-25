@@ -7,6 +7,10 @@ export type User = {
   deletedTime: number | null;
 };
 
+export type UserWithCredentials = User & {
+  passwordHash: string;
+};
+
 export type EmailVerification = {
   id: string;
   email: string;

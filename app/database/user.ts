@@ -1,8 +1,8 @@
-import type { User } from "@/types";
+import type { User, UserWithCredentials } from "@/types";
 import { ObjectId, type WithId } from "mongodb";
 import { db } from "./db";
 
-type Doc = Omit<User, "id"> & { passwordHash: string };
+type Doc = Omit<UserWithCredentials, "id">;
 
 const collection = db.collection<Doc>("users");
 
@@ -13,7 +13,7 @@ export async function findUserById(id: string) {
     return null;
   }
 
-  return normalize(doc);
+  return toUser(doc);
 }
 
 export async function hasUserByEmail(email: string) {
@@ -22,14 +22,14 @@ export async function hasUserByEmail(email: string) {
   return count > 0;
 }
 
-export async function findUserWithPasswordByEmail(email: string) {
+export async function findUserWithCredentialsByEmail(email: string) {
   const doc = await collection.findOne({ email, deletedTime: null });
 
   if (!doc) {
     return null;
   }
 
-  return { ...normalize(doc), passwordHash: doc.passwordHash };
+  return toUserWithCredentials(doc);
 }
 
 type CreateUserDto = {
@@ -51,10 +51,16 @@ export async function createUser(dto: CreateUserDto) {
 
   const { insertedId } = await collection.insertOne({ ...doc });
 
-  return normalize({ _id: insertedId, ...doc });
+  return toUser({ _id: insertedId, ...doc });
 }
 
-function normalize(doc: WithId<Doc>): User {
+function toUserWithCredentials(doc: WithId<Doc>): UserWithCredentials {
+  const { _id, ...rest } = doc;
+
+  return { id: _id.toHexString(), ...rest };
+}
+
+function toUser(doc: WithId<Doc>): User {
   const { _id, passwordHash, ...rest } = doc;
 
   return { id: _id.toHexString(), ...rest };
