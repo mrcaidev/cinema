@@ -56,9 +56,14 @@ export default {
           "0%,70%,100%": { opacity: "1" },
           "20%,50%": { opacity: "0" },
         },
+        "zoom-in": {
+          from: { opacity: "0", transform: "translateY(-64px) scale(0.5)" },
+          to: { opacity: "1", transform: "translateY(-64px) scale(1)" },
+        },
       },
       animation: {
         "caret-blink": "caret-blink 1.25s ease-out infinite",
+        "zoom-in": "zoom-in 0.25s ease-out",
       },
     },
   },
