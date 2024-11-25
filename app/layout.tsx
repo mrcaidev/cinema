@@ -28,7 +28,7 @@ export function Layout({ children }: PropsWithChildren) {
         <Meta />
         <Links />
       </head>
-      <body className="bg-background text-foreground font-sans antialiased">
+      <body className="bg-background text-foreground font-sans antialiased scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-muted">
         {children}
         <ScrollRestoration />
         <Scripts />
