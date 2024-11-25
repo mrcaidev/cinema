@@ -1,9 +1,21 @@
-import { Outlet } from "react-router";
+import { Button } from "@/components/ui/button";
+import { ChevronLeftIcon } from "lucide-react";
+import { Link, Outlet } from "react-router";
 import bg from "./bg.webp";
 
 export default function Layout() {
   return (
-    <main className="grid lg:grid-cols-2 min-h-screen">
+    <main className="grid lg:grid-cols-2 relative min-h-screen">
+      <Button
+        variant="ghost"
+        asChild
+        className="absolute left-8 sm:left-20 top-20"
+      >
+        <Link to="/">
+          <ChevronLeftIcon />
+          Home
+        </Link>
+      </Button>
       <div className="place-self-center">
         <Outlet />
       </div>
