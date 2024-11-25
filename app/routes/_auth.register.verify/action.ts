@@ -3,14 +3,15 @@ import {
   verifyEmailVerificationById,
 } from "@/database/email-verification";
 import { getEmailVerificationSession } from "@/utils/session";
-import { type ActionFunctionArgs, data, redirect } from "react-router";
+import { data, redirect } from "react-router";
 import * as v from "valibot";
+import type { Route } from "./+types/route";
 
 const schema = v.object({
   otp: v.pipe(v.string(), v.regex(/^\d{6}$/)),
 });
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
 
   const { success, issues, output } = await v.safeParseAsync(

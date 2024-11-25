@@ -1,7 +1,5 @@
 import { Outlet } from "react-router";
 import bg from "./bg.webp";
-import { loader } from "./loader";
-import { meta } from "./meta";
 
 export default function Layout() {
   return (
@@ -41,4 +39,5 @@ export default function Layout() {
   );
 }
 
-export { loader, meta };
+export { loader } from "./loader";
+export { meta } from "./meta";

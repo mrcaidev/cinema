@@ -1,7 +1,8 @@
 import { getUserSession } from "@/utils/session";
-import { redirect, type LoaderFunctionArgs } from "react-router";
+import { redirect } from "react-router";
+import type { Route } from "./+types/route";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request }: Route.LoaderArgs) {
   const userSession = await getUserSession(request.headers.get("Cookie"));
 
   const isLoggedIn = userSession.has("id");

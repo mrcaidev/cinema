@@ -1,3 +1,1 @@
-import { action } from "./action";
-
-export { action };
+export { action } from "./action";

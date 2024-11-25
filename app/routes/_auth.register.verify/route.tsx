@@ -9,10 +9,9 @@ import { useToast } from "@/components/ui/use-toast";
 import { ShieldCheckIcon } from "lucide-react";
 import { useEffect } from "react";
 import { useFetcher } from "react-router";
-import { action } from "./action";
 
 export default function Page() {
-  const { Form, data, state } = useFetcher<typeof action>();
+  const { Form, data, state } = useFetcher();
 
   const { toast } = useToast();
 
@@ -55,4 +54,4 @@ export default function Page() {
   );
 }
 
-export { action };
+export { action } from "./action";

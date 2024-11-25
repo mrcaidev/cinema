@@ -1,7 +1,8 @@
 import { destroyUserSession, getUserSession } from "@/utils/session";
-import { data, type ActionFunctionArgs } from "react-router";
+import { data } from "react-router";
+import type { Route } from "./+types/route";
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ request }: Route.ActionArgs) {
   const userSession = await getUserSession(request.headers.get("Cookie"));
 
   const userCookie = await destroyUserSession(userSession);

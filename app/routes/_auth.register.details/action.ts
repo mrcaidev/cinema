@@ -7,8 +7,9 @@ import {
   getUserSession,
 } from "@/utils/session";
 import { hash } from "bcrypt";
-import { type ActionFunctionArgs, data, redirect } from "react-router";
+import { data, redirect } from "react-router";
 import * as v from "valibot";
+import type { Route } from "./+types/route";
 
 const schema = v.object({
   password: v.pipe(v.string(), v.minLength(8), v.maxLength(20)),
@@ -22,7 +23,7 @@ const schema = v.object({
   ]),
 });
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
 
   const { success, issues, output } = await v.safeParseAsync(

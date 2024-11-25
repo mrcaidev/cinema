@@ -5,14 +5,15 @@ import {
   commitEmailVerificationSession,
   getEmailVerificationSession,
 } from "@/utils/session";
-import { data, redirect, type ActionFunctionArgs } from "react-router";
+import { data, redirect } from "react-router";
 import * as v from "valibot";
+import type { Route } from "./+types/route";
 
 const schema = v.object({
   email: v.pipe(v.string(), v.email()),
 });
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
 
   const { success, issues, output } = await v.safeParseAsync(
