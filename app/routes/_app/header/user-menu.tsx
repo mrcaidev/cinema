@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,16 +7,30 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { User } from "@/types";
-import { LifeBuoyIcon, SettingsIcon } from "lucide-react";
-import { Link } from "react-router";
+import { LifeBuoyIcon, LogInIcon, SettingsIcon } from "lucide-react";
+import { Link, useLoaderData } from "react-router";
+import type { loader } from "../loader";
 import { LogOutButton } from "./log-out-button";
 
-type Props = {
-  user: User;
-};
+export function UserMenu() {
+  const user = useLoaderData<typeof loader>();
 
-export function UserMenu({ user }: Props) {
+  if (!user) {
+    return (
+      <Button
+        variant="ghost"
+        size="icon"
+        aria-label="Log in"
+        asChild
+        className="[&_svg]:size-5"
+      >
+        <Link to="/login">
+          <LogInIcon />
+        </Link>
+      </Button>
+    );
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
