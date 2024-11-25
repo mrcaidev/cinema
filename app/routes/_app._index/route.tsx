@@ -1,22 +1,11 @@
-import { findUserById } from "@/database/user";
-import { getMeSession } from "@/utils/session";
+import { loadMe } from "@/loaders/me";
 import type { Route } from "./+types/route";
 import { Greeting } from "./greeting";
 import { JoinRoomButton } from "./join-room-button";
 import { NewRoomButton } from "./new-room-button";
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const meSession = await getMeSession(request.headers.get("Cookie"));
-
-  const meId = meSession.get("id");
-
-  if (!meId) {
-    return null;
-  }
-
-  const me = await findUserById(meId);
-
-  return me;
+  return await loadMe(request);
 }
 
 export function meta() {
