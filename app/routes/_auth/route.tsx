@@ -40,4 +40,3 @@ export default function Layout() {
 }
 
 export { loader } from "./loader";
-export { meta } from "./meta";
