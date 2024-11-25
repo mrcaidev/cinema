@@ -1,9 +1,7 @@
 "use client";
 
-// Inspired by react-hot-toast library
 import * as React from "react";
-
-import type { ToastActionElement, ToastProps } from "@/components/ui/toast";
+import type { ToastActionElement, ToastProps } from "./toast";
 
 const TOAST_LIMIT = 1;
 const TOAST_REMOVE_DELAY = 1000000;
@@ -15,6 +13,13 @@ type ToasterToast = ToastProps & {
   action?: ToastActionElement;
 };
 
+const actionTypes = {
+  ADD_TOAST: "ADD_TOAST",
+  UPDATE_TOAST: "UPDATE_TOAST",
+  DISMISS_TOAST: "DISMISS_TOAST",
+  REMOVE_TOAST: "REMOVE_TOAST",
+} as const;
+
 let count = 0;
 
 function genId() {
@@ -22,12 +27,7 @@ function genId() {
   return count.toString();
 }
 
-type ActionType = {
-  readonly ADD_TOAST: "ADD_TOAST";
-  readonly UPDATE_TOAST: "UPDATE_TOAST";
-  readonly DISMISS_TOAST: "DISMISS_TOAST";
-  readonly REMOVE_TOAST: "REMOVE_TOAST";
-};
+type ActionType = typeof actionTypes;
 
 type Action =
   | {
@@ -40,7 +40,7 @@ type Action =
     }
   | {
       type: ActionType["DISMISS_TOAST"];
-      toastId?: ToasterToast["id"] | undefined;
+      toastId?: ToasterToast["id"];
     }
   | {
       type: ActionType["REMOVE_TOAST"];
@@ -93,9 +93,9 @@ export const reducer = (state: State, action: Action): State => {
       if (toastId) {
         addToRemoveQueue(toastId);
       } else {
-        for (const toast of state.toasts) {
+        state.toasts.forEach((toast) => {
           addToRemoveQueue(toast.id);
-        }
+        });
       }
 
       return {
@@ -130,9 +130,9 @@ let memoryState: State = { toasts: [] };
 
 function dispatch(action: Action) {
   memoryState = reducer(memoryState, action);
-  for (const listener of listeners) {
+  listeners.forEach((listener) => {
     listener(memoryState);
-  }
+  });
 }
 
 type Toast = Omit<ToasterToast, "id">;
@@ -169,7 +169,6 @@ function toast({ ...props }: Toast) {
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Trust shadcn/ui.
   React.useEffect(() => {
     listeners.push(setState);
     return () => {

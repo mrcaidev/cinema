@@ -34,7 +34,6 @@ const InputOTPSlot = React.forwardRef<
   React.ComponentPropsWithoutRef<"div"> & { index: number }
 >(({ index, className, ...props }, ref) => {
   const inputOTPContext = React.useContext(OTPInputContext);
-  // biome-ignore lint/style/noNonNullAssertion: Trust shadcn/ui.
   const { char, hasFakeCaret, isActive } = inputOTPContext.slots[index]!;
 
   return (
@@ -62,8 +61,6 @@ const InputOTPSeparator = React.forwardRef<
   React.ElementRef<"div">,
   React.ComponentPropsWithoutRef<"div">
 >(({ ...props }, ref) => (
-  // biome-ignore lint/a11y/useSemanticElements: Trust shadcn/ui.
-  // biome-ignore lint/a11y/useFocusableInteractive: Trust shadcn/ui.
   <div ref={ref} role="separator" {...props}>
     <Dot />
   </div>

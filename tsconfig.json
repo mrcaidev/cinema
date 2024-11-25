@@ -18,10 +18,7 @@
     "types": ["vite/client"],
     "noEmit": true,
     "allowJs": true,
-    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "jsx": "react-jsx",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
@@ -29,5 +26,5 @@
     "incremental": true,
     "skipLibCheck": true
   },
-  "include": ["**/*", ".react-router/types/**/*"]
+  "include": ["**/*", ".react-router/types"]
 }

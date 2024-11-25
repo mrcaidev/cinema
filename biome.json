@@ -8,7 +8,8 @@
     "clientKind": "git"
   },
   "linter": {
-    "enabled": true
+    "enabled": true,
+    "ignore": ["components/ui"]
   },
   "formatter": {
     "enabled": true,
