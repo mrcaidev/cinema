@@ -25,7 +25,9 @@ export default function Page() {
       </p>
       <Form method="POST" className="space-y-4">
         <div className="space-y-1">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" required>
+            Email
+          </Label>
           <Input
             type="email"
             name="email"

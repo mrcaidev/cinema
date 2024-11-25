@@ -28,7 +28,13 @@ export default function Page() {
         Enter the OTP sent to your email inbox
       </p>
       <Form method="POST" className="space-y-4">
-        <InputOTP name="otp" maxLength={6} containerClassName="justify-center">
+        <InputOTP
+          name="otp"
+          required
+          minLength={6}
+          maxLength={6}
+          containerClassName="justify-center"
+        >
           <InputOTPGroup>
             <InputOTPSlot index={0} />
             <InputOTPSlot index={1} />

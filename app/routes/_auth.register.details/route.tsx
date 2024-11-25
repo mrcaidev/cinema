@@ -25,7 +25,9 @@ export default function Page() {
       </p>
       <Form method="POST" className="space-y-4">
         <div className="space-y-1">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password" required>
+            Password
+          </Label>
           <Input
             type="password"
             name="password"
@@ -37,7 +39,9 @@ export default function Page() {
           />
         </div>
         <div className="space-y-1">
-          <Label htmlFor="confirmPassword">Confirm password</Label>
+          <Label htmlFor="confirmPassword" required>
+            Confirm password
+          </Label>
           <Input
             type="password"
             name="confirmPassword"
