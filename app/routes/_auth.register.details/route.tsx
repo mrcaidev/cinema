@@ -82,7 +82,6 @@ export async function action({ request }: Route.ActionArgs) {
   const user = await createUser({
     email,
     nickname,
-    avatarUrl: null,
     passwordSalt,
     passwordHash,
   });
