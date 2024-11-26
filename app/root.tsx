@@ -1,6 +1,14 @@
 import "@fontsource-variable/nunito";
 import type { PropsWithChildren } from "react";
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import {
+  isRouteErrorResponse,
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+} from "react-router";
+import type { Route } from "./+types/root";
 import { Toaster } from "./components/ui/toaster";
 import "./global.css";
 
@@ -43,9 +51,6 @@ export function Layout({ children }: PropsWithChildren) {
 export default function Root() {
   return <Outlet />;
 }
-
-import { isRouteErrorResponse } from "react-router";
-import type { Route } from "./+types/root";
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   const details = getDetails(error);
