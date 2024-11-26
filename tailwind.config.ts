@@ -4,7 +4,7 @@ import animate from "tailwindcss-animate";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
 export default {
-  content: ["app/root.tsx", "app/{components,routes}/**/*.tsx"],
+  content: ["app/**/*.tsx"],
   darkMode: "selector",
   theme: {
     extend: {
