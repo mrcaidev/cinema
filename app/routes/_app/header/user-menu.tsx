@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -7,6 +6,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { UserAvatar } from "@/components/user-avatar";
 import { LifeBuoyIcon, LogInIcon, SettingsIcon } from "lucide-react";
 import { Link, useLoaderData } from "react-router";
 import type { loader } from "../route";
@@ -34,12 +34,7 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Avatar>
-          <AvatarImage src={me.avatarUrl ?? undefined} alt="" />
-          <AvatarFallback className="uppercase">
-            {me.nickname?.[0] ?? me.email[0]}
-          </AvatarFallback>
-        </Avatar>
+        <UserAvatar user={me} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-48">
         <div className="space-y-0.5 px-2 py-1">
@@ -54,13 +49,15 @@ export function UserMenu() {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild className="cursor-pointer">
-          <a href="/support" target="_blank" rel="noreferrer">
+          <Link to="/support">
             <LifeBuoyIcon />
             Support
-          </a>
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <LogOutButton />
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <LogOutButton />
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

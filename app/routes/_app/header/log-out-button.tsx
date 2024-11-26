@@ -1,18 +1,23 @@
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { cn } from "@/components/ui/cn";
 import type { action } from "@/routes/_auth.logout/route";
 import { Loader2Icon, LogOutIcon } from "lucide-react";
+import { forwardRef, type HTMLAttributes } from "react";
 import { useFetcher } from "react-router";
 
-export function LogOutButton() {
-  const { submit, state } = useFetcher<typeof action>();
+export const LogOutButton = forwardRef<
+  HTMLButtonElement,
+  HTMLAttributes<HTMLButtonElement>
+>(({ className, ...props }, ref) => {
+  const { Form, state } = useFetcher<typeof action>();
 
   return (
-    <DropdownMenuItem asChild className="cursor-pointer">
+    <Form method="POST" action="/logout">
       <button
-        type="button"
+        ref={ref}
+        type="submit"
         disabled={state === "submitting"}
-        onClick={() => submit(null, { method: "POST", action: "/logout" })}
-        className="w-full"
+        className={cn("w-full", className)}
+        {...props}
       >
         {state === "submitting" ? (
           <Loader2Icon className="animate-spin" />
@@ -21,6 +26,8 @@ export function LogOutButton() {
         )}
         Log out
       </button>
-    </DropdownMenuItem>
+    </Form>
   );
-}
+});
+
+LogOutButton.displayName = "LogOutButton";

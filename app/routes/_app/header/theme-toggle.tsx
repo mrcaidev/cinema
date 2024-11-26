@@ -43,12 +43,16 @@ function setLight() {
   localStorage.setItem("theme", "light");
 
   document.documentElement.classList.remove("dark");
+
+  suspendTransitions();
 }
 
 function setDark() {
   localStorage.setItem("theme", "dark");
 
   document.documentElement.classList.add("dark");
+
+  suspendTransitions();
 }
 
 function setSystem() {
@@ -59,4 +63,14 @@ function setSystem() {
   } else {
     document.documentElement.classList.remove("dark");
   }
+
+  suspendTransitions();
+}
+
+function suspendTransitions() {
+  document.documentElement.classList.add("disable-transition");
+
+  setTimeout(() => {
+    document.documentElement.classList.remove("disable-transition");
+  }, 1);
 }

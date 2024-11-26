@@ -11,7 +11,7 @@ export default function AppLayout() {
   return (
     <>
       <Header />
-      <main className="px-8 pt-20">
+      <main className="px-8">
         <Outlet />
       </main>
     </>

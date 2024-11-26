@@ -5,7 +5,7 @@ export function Logo() {
     <Link to="/" className="flex items-center gap-2">
       <img
         src="/favicon.svg"
-        alt=""
+        alt="Logo, an orange cinema projector"
         width={24}
         height={24}
         className="size-6"

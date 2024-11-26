@@ -14,8 +14,8 @@ export function meta() {
 
 export default function HomePage() {
   return (
-    <div className="grid place-items-center min-h-[calc(100vh-80px)]">
-      <div className="space-y-5 -translate-y-16">
+    <div className="grid place-items-center min-h-screen">
+      <div className="space-y-5">
         <Greeting />
         <div className="flex justify-center items-center gap-3">
           <JoinRoomButton />
