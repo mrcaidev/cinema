@@ -119,45 +119,47 @@ export default function JoinRoomPage() {
 
   return (
     <div className="grid place-items-center min-h-[calc(100vh-80px)]">
-      <Card className="-translate-y-16 animate-zoom-in">
-        <CardHeader>
-          <CardTitle>Join Other's Room</CardTitle>
-          <CardDescription>
-            Paste the link that your friend has shared with you.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form method="POST" id="join-room-form">
-            <label htmlFor="room" className="sr-only">
-              Room link
-            </label>
-            <Input
-              type="url"
-              name="room"
-              placeholder="https://cinema.mrcai.dev/room/..."
-              autoFocus
-              required
-              id="room"
-            />
-          </Form>
-        </CardContent>
-        <CardFooter className="justify-between">
-          <Button variant="outline" asChild>
-            <Link to="/">
-              <ChevronLeftIcon />
-              Back
-            </Link>
-          </Button>
-          <Button form="join-room-form" disabled={state === "submitting"}>
-            {state === "submitting" ? (
-              <Loader2Icon className="animate-spin" />
-            ) : (
-              <UsersRoundIcon />
-            )}
-            Join
-          </Button>
-        </CardFooter>
-      </Card>
+      <div className="-translate-y-16">
+        <Card className="animate-in fade-in-0 zoom-in-95">
+          <CardHeader>
+            <CardTitle>Join Other's Room</CardTitle>
+            <CardDescription>
+              Paste the link that your friend has shared with you.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form method="POST" id="join-room-form">
+              <label htmlFor="room" className="sr-only">
+                Room link
+              </label>
+              <Input
+                type="url"
+                name="room"
+                placeholder="https://cinema.mrcai.dev/room/..."
+                autoFocus
+                required
+                id="room"
+              />
+            </Form>
+          </CardContent>
+          <CardFooter className="justify-between">
+            <Button variant="outline" asChild>
+              <Link to="/">
+                <ChevronLeftIcon />
+                Back
+              </Link>
+            </Button>
+            <Button form="join-room-form" disabled={state === "submitting"}>
+              {state === "submitting" ? (
+                <Loader2Icon className="animate-spin" />
+              ) : (
+                <UsersRoundIcon />
+              )}
+              Join
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
     </div>
   );
 }

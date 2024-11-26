@@ -82,58 +82,62 @@ export default function NewRoomPage() {
 
   return (
     <div className="grid place-items-center min-h-[calc(100vh-80px)]">
-      <Card className="-translate-y-16 animate-zoom-in">
-        <CardHeader>
-          <CardTitle>Create a Room</CardTitle>
-          <CardDescription>
-            Host a cinema room and invite your family and friends
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form method="POST" className="space-y-4" id="new-room-form">
-            <div className="space-y-1">
-              <Label htmlFor="name" required>
-                Name
-              </Label>
-              <Input
-                name="name"
-                defaultValue={me.nickname ? `${me.nickname}'s Room` : "My Room"}
-                placeholder="1-30 characters"
-                required
-                minLength={1}
-                maxLength={30}
-                id="name"
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                name="password"
-                placeholder="Optional, 2-20 characters"
-                minLength={2}
-                maxLength={20}
-                id="password"
-              />
-            </div>
-          </Form>
-        </CardContent>
-        <CardFooter className="justify-between">
-          <Button variant="outline" asChild>
-            <Link to="/">
-              <ChevronLeftIcon />
-              Back
-            </Link>
-          </Button>
-          <Button form="new-room-form" disabled={state === "submitting"}>
-            {state === "submitting" ? (
-              <Loader2Icon className="animate-spin" />
-            ) : (
-              <PlusIcon />
-            )}
-            Create
-          </Button>
-        </CardFooter>
-      </Card>
+      <div className="-translate-y-16">
+        <Card className="animate-in fade-in-0 zoom-in-95">
+          <CardHeader>
+            <CardTitle>Create a Room</CardTitle>
+            <CardDescription>
+              Host a cinema room and invite your family and friends
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form method="POST" className="space-y-4" id="new-room-form">
+              <div className="space-y-1">
+                <Label htmlFor="name" required>
+                  Name
+                </Label>
+                <Input
+                  name="name"
+                  defaultValue={
+                    me.nickname ? `${me.nickname}'s Room` : "My Room"
+                  }
+                  placeholder="1-30 characters"
+                  required
+                  minLength={1}
+                  maxLength={30}
+                  id="name"
+                />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  name="password"
+                  placeholder="Optional, 2-20 characters"
+                  minLength={2}
+                  maxLength={20}
+                  id="password"
+                />
+              </div>
+            </Form>
+          </CardContent>
+          <CardFooter className="justify-between">
+            <Button variant="outline" asChild>
+              <Link to="/">
+                <ChevronLeftIcon />
+                Back
+              </Link>
+            </Button>
+            <Button form="new-room-form" disabled={state === "submitting"}>
+              {state === "submitting" ? (
+                <Loader2Icon className="animate-spin" />
+              ) : (
+                <PlusIcon />
+              )}
+              Create
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
     </div>
   );
 }
