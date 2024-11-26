@@ -18,7 +18,7 @@ export async function loadMe<Strict extends boolean>(
   request: Request,
   options: LoadMeOptions<Strict> = {},
 ): Promise<Strict extends true ? User : User | null> {
-  const { strict = false as Strict } = options;
+  const { strict = false } = options;
 
   const meSession = await getMeSession(request.headers.get("Cookie"));
 
@@ -37,15 +37,13 @@ export async function loadMe<Strict extends boolean>(
   if (!me) {
     const meCookie = await destroyMeSession(meSession);
 
+    const headers = { "Set-Cookie": meCookie };
+
     if (strict) {
-      return redirect("/login", {
-        headers: { "Set-Cookie": meCookie },
-      }) as never;
+      return redirect("/login", { headers }) as never;
     }
 
-    return data(null as unknown as User, {
-      headers: { "Set-Cookie": meCookie },
-    }) as unknown as User;
+    return data(null, { headers }) as unknown as User;
   }
 
   return me;
