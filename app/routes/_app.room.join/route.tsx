@@ -11,48 +11,24 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { ChevronLeftIcon, Loader2Icon, UsersRoundIcon } from "lucide-react";
 import { useEffect } from "react";
-import { data, Link, redirect, useFetcher } from "react-router";
-import * as v from "valibot";
+import { Link, useFetcher } from "react-router";
 import type { Route } from "./+types/route";
-
-const schema = v.pipe(
-  v.object({
-    room: v.pipe(v.string(), v.url()),
-  }),
-  v.transform(({ room }) => {
-    const url = new URL(room);
-    return {
-      domain: url.hostname,
-      slug: url.pathname.replace(/^\/room\//, ""),
-      password: url.searchParams.get("pwd"),
-    };
-  }),
-  v.object({
-    domain: import.meta.env.DEV
-      ? v.union([v.literal("localhost"), v.literal("cinema.mrcai.dev")])
-      : v.literal("cinema.mrcai.dev"),
-    slug: v.pipe(v.string(), v.nanoid(), v.length(10)),
-    password: v.nullable(v.pipe(v.string(), v.minLength(2), v.maxLength(20))),
-  }),
-);
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
   const formData = await request.formData();
 
-  const { success, issues, output } = await v.safeParseAsync(
-    schema,
-    Object.fromEntries(formData),
-  );
+  const url = new URL(formData.get("invitationLink")?.toString() ?? "");
 
-  if (!success) {
-    return data({ error: issues[0].message }, { status: 400 });
+  if (!/^\/room\/[\w-]{10}\/join$/.test(url.pathname)) {
+    return {
+      error:
+        "This invitation link is invalid. Please make sure you pasted the full correct link",
+    };
   }
 
-  const { slug, password } = output;
+  window.location.href = `${url.pathname}?${url.searchParams}`;
 
-  return redirect(
-    `/room/${slug}/join${password ? `?pwd=${password}` : ""}`,
-  ) as never;
+  return undefined as never;
 }
 
 export function meta() {
@@ -76,21 +52,22 @@ export default function JoinRoomPage() {
         <CardHeader>
           <CardTitle>Join Other's Room</CardTitle>
           <CardDescription>
-            Paste the link that your friend has shared with you.
+            Paste the invitation link that your friend has shared with you.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form method="POST" id="join-room-form">
-            <label htmlFor="room" className="sr-only">
-              Room link
+            <label htmlFor="invitationLink" className="sr-only">
+              Invitation link
             </label>
             <Input
               type="url"
-              name="room"
-              placeholder="https://cinema.mrcai.dev/room/..."
+              name="invitationLink"
+              autoComplete="off"
               autoFocus
+              placeholder="https://cinema.mrcai.dev/room/..."
               required
-              id="room"
+              id="invitationLink"
             />
           </Form>
         </CardContent>
