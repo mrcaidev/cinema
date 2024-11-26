@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { createEmailVerification } from "@/database/email-verification";
-import { hasUserByEmail } from "@/database/user";
+import { findUserByEmail } from "@/database/user";
 import { sendEmail } from "@/utils/email";
 import {
   commitEmailVerificationSession,
@@ -33,9 +33,9 @@ export async function action({ request }: Route.ActionArgs) {
 
   const { email } = output;
 
-  const isEmailConflicted = await hasUserByEmail(email);
+  const conflictedUser = await findUserByEmail(email);
 
-  if (isEmailConflicted) {
+  if (conflictedUser) {
     return data(
       { error: "This email has already been registered." },
       { status: 409 },

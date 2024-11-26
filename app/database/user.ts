@@ -16,10 +16,14 @@ export async function findUserById(id: string) {
   return toUser(doc);
 }
 
-export async function hasUserByEmail(email: string) {
-  const count = await collection.countDocuments({ email, deletedTime: null });
+export async function findUserByEmail(email: string) {
+  const doc = await collection.findOne({ email, deletedTime: null });
 
-  return count > 0;
+  if (!doc) {
+    return null;
+  }
+
+  return toUser(doc);
 }
 
 export async function findUserWithCredentialsByEmail(email: string) {
