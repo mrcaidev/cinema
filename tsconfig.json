@@ -26,5 +26,5 @@
     "incremental": true,
     "skipLibCheck": true
   },
-  "include": ["**/*", ".react-router/types"]
+  "include": [".", ".react-router/types"]
 }
