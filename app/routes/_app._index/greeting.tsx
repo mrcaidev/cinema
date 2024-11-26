@@ -6,14 +6,14 @@ export function Greeting() {
   const me = useLoaderData<typeof loader>();
 
   const [{ text, emoji }, setGreeting] = useState({
-    text: "Hello",
-    emoji: "👋",
+    text: "Good afternoon",
+    emoji: "☀️",
   });
 
   useEffect(() => setGreeting(localizeGreeting()), []);
 
   return (
-    <p className="text-2xl text-center font-medium">
+    <p className="text-xl sm:text-2xl text-center font-medium">
       {text}
       {me && `, ${me.nickname}`}
       &nbsp;
