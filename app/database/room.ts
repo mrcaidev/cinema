@@ -17,28 +17,19 @@ export async function findRoomWithCredentialsBySlug(slug: string) {
   return toRoomWithCredentials(doc);
 }
 
-type CreateRoomDto = {
-  name: string;
-  host: User;
-  passwordSalt: string | null;
-  passwordHash: string | null;
-};
+type CreateRoomDto = Pick<
+  Doc,
+  "name" | "host" | "passwordSalt" | "passwordHash"
+>;
 
 export async function createRoom(dto: CreateRoomDto) {
   const doc: Doc = {
+    ...dto,
     slug: nanoid(10),
-    name: dto.name,
-    host: {
-      id: dto.host.id,
-      nickname: dto.host.nickname,
-      avatarUrl: dto.host.avatarUrl,
-    },
     admins: [],
     members: [],
     createdTime: Date.now(),
     deletedTime: null,
-    passwordSalt: dto.passwordSalt,
-    passwordHash: dto.passwordHash,
   };
 
   const { insertedId } = await collection.insertOne({ ...doc });

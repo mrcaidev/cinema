@@ -58,7 +58,16 @@ export async function action({ request }: Route.ActionArgs) {
     passwordHash = await hash(password, passwordSalt);
   }
 
-  const room = await createRoom({ name, host: me, passwordSalt, passwordHash });
+  const room = await createRoom({
+    name,
+    host: {
+      id: me.id,
+      nickname: me.nickname,
+      avatarUrl: me.avatarUrl,
+    },
+    passwordSalt,
+    passwordHash,
+  });
 
   return redirect(`/room/${room.slug}/welcome`) as never;
 }

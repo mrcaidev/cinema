@@ -36,22 +36,17 @@ export async function findUserWithCredentialsByEmail(email: string) {
   return toUserWithCredentials(doc);
 }
 
-type CreateUserDto = {
-  email: string;
-  nickname: string | null;
-  passwordSalt: string;
-  passwordHash: string;
-};
+type CreateUserDto = Pick<
+  Doc,
+  "email" | "nickname" | "passwordSalt" | "passwordHash"
+>;
 
 export async function createUser(dto: CreateUserDto) {
   const doc: Doc = {
-    email: dto.email,
-    nickname: dto.nickname,
+    ...dto,
     avatarUrl: null,
     createdTime: Date.now(),
     deletedTime: null,
-    passwordSalt: dto.passwordSalt,
-    passwordHash: dto.passwordHash,
   };
 
   const { insertedId } = await collection.insertOne({ ...doc });
