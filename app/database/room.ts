@@ -7,6 +7,16 @@ type Doc = Omit<RoomWithCredentials, "id">;
 
 const collection = db.collection<Doc>("rooms");
 
+export async function findRoomBySlug(slug: string) {
+  const doc = await collection.findOne({ slug });
+
+  if (!doc || doc.deletedTime) {
+    return null;
+  }
+
+  return toRoom(doc);
+}
+
 export async function findRoomWithCredentialsBySlug(slug: string) {
   const doc = await collection.findOne({ slug });
 
