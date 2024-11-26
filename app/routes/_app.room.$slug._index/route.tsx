@@ -4,6 +4,8 @@ import { getVisitorSession } from "@/utils/session";
 import { redirect } from "react-router";
 import * as v from "valibot";
 import type { Route } from "./+types/route";
+import { Chat } from "./chat";
+import { SocketProvider } from "./socket-context";
 
 const schema = v.object({
   slug: v.pipe(v.string(), v.nanoid(), v.length(10)),
@@ -65,10 +67,13 @@ export default function RoomPage({
   loaderData: { room, me, role },
 }: Route.ComponentProps) {
   return (
-    <div className="pt-20">
-      <h1>Room {room.name}</h1>
-      <p>My nickname: {me.nickname}</p>
-      <p>My role: {role}</p>
-    </div>
+    <SocketProvider>
+      <div className="pt-20">
+        <h1>Room {room.name}</h1>
+        <p>My nickname: {me.nickname}</p>
+        <p>My role: {role}</p>
+        <Chat />
+      </div>
+    </SocketProvider>
   );
 }
