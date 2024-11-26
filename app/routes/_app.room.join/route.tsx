@@ -106,6 +106,10 @@ export async function action({ request }: Route.ActionArgs) {
   return redirect(`/room/${slug}/welcome`) as never;
 }
 
+export function meta() {
+  return [{ title: "Join Room | Cinema" }];
+}
+
 export default function JoinRoomPage() {
   const { Form, data, state } = useFetcher<typeof action>();
 
