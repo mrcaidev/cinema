@@ -14,13 +14,18 @@ const schema = v.object({
 });
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  const { success, issues, output } = await v.safeParseAsync(schema, {
+  const url = new URL(request.url);
+
+  const { success, output } = await v.safeParseAsync(schema, {
     slug: params.slug,
-    password: new URL(request.url).searchParams.get("pwd"),
+    password: url.searchParams.get("pwd"),
   });
 
   if (!success) {
-    return data({ error: issues[0].message }, { status: 400 });
+    return data(
+      { error: "Make sure you pasted the correct invitation link!" },
+      { status: 403 },
+    );
   }
 
   const { slug, password } = output;
@@ -28,7 +33,10 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const roomWithCredentials = await findRoomWithCredentialsBySlug(slug);
 
   if (!roomWithCredentials) {
-    return data({ error: "This room does not exist" }, { status: 404 });
+    return data(
+      { error: "Make sure you pasted the correct invitation link!" },
+      { status: 403 },
+    );
   }
 
   const {
@@ -46,24 +54,24 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     return redirect(`/room/${slug}`) as never;
   }
 
-  if (!passwordSalt || !passwordHash) {
-    return redirect(`/room/${slug}/welcome`) as never;
-  }
+  if (passwordSalt && passwordHash) {
+    if (!password) {
+      return data(
+        {
+          error: "Make sure you pasted the correct invitation link!",
+        },
+        { status: 403 },
+      );
+    }
 
-  if (!password) {
-    return data(
-      {
-        error:
-          "This room is protected with password. Did you copy the full link?",
-      },
-      { status: 403 },
-    );
-  }
+    const attemptHash = await hash(password, passwordSalt);
 
-  const attemptHash = await hash(password, passwordSalt);
-
-  if (attemptHash !== passwordHash) {
-    return data({ error: "Password is incorrect" }, { status: 403 });
+    if (attemptHash !== passwordHash) {
+      return data(
+        { error: "Make sure you pasted the correct invitation link!" },
+        { status: 403 },
+      );
+    }
   }
 
   if (!me) {
@@ -75,13 +83,17 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   return redirect(`/room/${slug}/welcome`) as never;
 }
 
+export function meta() {
+  return [{ title: "Join Room | Cinema" }];
+}
+
 export default function RoomJoinPage({
   loaderData: { error },
 }: Route.ComponentProps) {
   return (
     <div className="grid place-items-center min-h-screen">
       <div className="space-y-1">
-        <h1 className="text-2xl font-medium">Join failed</h1>
+        <h1 className="text-2xl font-medium">Join failed 🥲</h1>
         <p className="text-muted-foreground">{error}</p>
       </div>
     </div>
