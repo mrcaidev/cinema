@@ -9,12 +9,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  addMemberToRoomById,
-  findRoomWithCredentialsBySlug,
-} from "@/database/room";
-import { loadMe } from "@/loaders/me";
-import { hash } from "@/utils/salt";
 import { ChevronLeftIcon, Loader2Icon, UsersRoundIcon } from "lucide-react";
 import { useEffect } from "react";
 import { data, Link, redirect, useFetcher } from "react-router";
@@ -38,11 +32,11 @@ const schema = v.pipe(
       ? v.union([v.literal("localhost"), v.literal("cinema.mrcai.dev")])
       : v.literal("cinema.mrcai.dev"),
     slug: v.pipe(v.string(), v.nanoid(), v.length(10)),
-    password: v.nullable(v.pipe(v.string(), v.minLength(1), v.maxLength(20))),
+    password: v.nullable(v.pipe(v.string(), v.minLength(2), v.maxLength(20))),
   }),
 );
 
-export async function action({ request }: Route.ActionArgs) {
+export async function clientAction({ request }: Route.ClientActionArgs) {
   const formData = await request.formData();
 
   const { success, issues, output } = await v.safeParseAsync(
@@ -56,54 +50,9 @@ export async function action({ request }: Route.ActionArgs) {
 
   const { slug, password } = output;
 
-  const roomWithCredentials = await findRoomWithCredentialsBySlug(slug);
-
-  if (!roomWithCredentials) {
-    return data({ error: "This room does not exist" }, { status: 404 });
-  }
-
-  const {
-    id: roomId,
-    host,
-    admins,
-    members,
-    passwordSalt,
-    passwordHash,
-  } = roomWithCredentials;
-
-  const me = await loadMe(request);
-
-  if (me && [host, ...admins, ...members].some((u) => u.id === me.id)) {
-    return redirect(`/room/${slug}`) as never;
-  }
-
-  if (!passwordSalt || !passwordHash) {
-    return redirect(`/room/${slug}/welcome`) as never;
-  }
-
-  if (!password) {
-    return data(
-      {
-        error:
-          "This room is protected with password. Did you copy the full link?",
-      },
-      { status: 403 },
-    );
-  }
-
-  const attemptHash = await hash(password, passwordSalt);
-
-  if (attemptHash !== passwordHash) {
-    return data({ error: "Password is incorrect" }, { status: 403 });
-  }
-
-  if (!me) {
-    return redirect(`/room/${slug}/welcome`) as never;
-  }
-
-  await addMemberToRoomById(roomId, me);
-
-  return redirect(`/room/${slug}/welcome`) as never;
+  return redirect(
+    `/room/${slug}/join${password ? `?pwd=${password}` : ""}`,
+  ) as never;
 }
 
 export function meta() {
@@ -111,7 +60,7 @@ export function meta() {
 }
 
 export default function JoinRoomPage() {
-  const { Form, data, state } = useFetcher<typeof action>();
+  const { Form, data, state } = useFetcher<typeof clientAction>();
 
   const { toast } = useToast();
 
