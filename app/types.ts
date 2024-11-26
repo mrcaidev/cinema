@@ -29,6 +29,7 @@ export type Room = {
   host: RoomUser;
   admins: RoomUser[];
   members: RoomUser[];
+  visitors: RoomUser[];
   createdTime: number;
   deletedTime: number | null;
 };

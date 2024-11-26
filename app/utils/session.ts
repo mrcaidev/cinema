@@ -29,3 +29,18 @@ export const {
     secure: true,
   },
 });
+
+export const {
+  commitSession: commitVisitorSession,
+  destroySession: destroyVisitorSession,
+  getSession: getVisitorSession,
+} = createCookieSessionStorage<{ id: string }>({
+  cookie: {
+    name: "vst",
+    secrets: [process.env.SESSION_SECRET],
+    httpOnly: true,
+    maxAge: 100 * 365 * 24 * 60 * 60, // 100 years (almost never expires)
+    sameSite: "strict",
+    secure: true,
+  },
+});

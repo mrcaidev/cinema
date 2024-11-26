@@ -1,4 +1,4 @@
-import type { Room, RoomWithCredentials, User } from "@/types";
+import type { Room, RoomUser, RoomWithCredentials } from "@/types";
 import { ObjectId, type WithId } from "mongodb";
 import { nanoid } from "nanoid";
 import { db } from "./db";
@@ -28,6 +28,7 @@ export async function createRoom(dto: CreateRoomDto) {
     slug: nanoid(10),
     admins: [],
     members: [],
+    visitors: [],
     createdTime: Date.now(),
     deletedTime: null,
   };
@@ -37,18 +38,24 @@ export async function createRoom(dto: CreateRoomDto) {
   return toRoom({ _id: insertedId, ...doc });
 }
 
-export async function addMemberToRoomById(id: string, member: User) {
-  const doc = await collection.findOneAndUpdate(
+export async function admitMemberToRoomById(id: string, member: RoomUser) {
+  await collection.updateOne(
     { _id: new ObjectId(id) },
     { $push: { members: member } },
-    { returnDocument: "after" },
   );
+}
 
-  if (!doc) {
-    return null;
-  }
+export async function admitVisitorToRoomById(id: string, visitorId: string) {
+  const visitor: RoomUser = {
+    id: visitorId,
+    nickname: `Visitor ${visitorId}`,
+    avatarUrl: null,
+  };
 
-  return toRoom(doc);
+  await collection.updateOne(
+    { _id: new ObjectId(id) },
+    { $push: { visitors: visitor } },
+  );
 }
 
 function toRoomWithCredentials(doc: WithId<Doc>): RoomWithCredentials {
