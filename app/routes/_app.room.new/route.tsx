@@ -77,7 +77,7 @@ export function meta() {
 }
 
 export default function NewRoomPage({ loaderData: me }: Route.ComponentProps) {
-  const { Form, data, state } = useFetcher();
+  const { Form, data, state } = useFetcher<typeof action>();
 
   const { toast } = useToast();
 
