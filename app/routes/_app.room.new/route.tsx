@@ -69,7 +69,7 @@ export async function action({ request }: Route.ActionArgs) {
     passwordHash,
   });
 
-  return redirect(`/room/${room.slug}/welcome`) as never;
+  return redirect(`/room/${room.slug}`) as never;
 }
 
 export function meta() {

@@ -75,12 +75,12 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   }
 
   if (!me) {
-    return redirect(`/room/${slug}/welcome`) as never;
+    return redirect(`/room/${slug}`) as never;
   }
 
   await addMemberToRoomById(roomId, me);
 
-  return redirect(`/room/${slug}/welcome`) as never;
+  return redirect(`/room/${slug}`) as never;
 }
 
 export function meta() {
