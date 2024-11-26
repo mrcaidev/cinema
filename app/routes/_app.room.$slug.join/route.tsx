@@ -79,11 +79,11 @@ export default function RoomJoinPage({
   loaderData: { error },
 }: Route.ComponentProps) {
   return (
-    <main className="grid place-items-center min-h-screen">
+    <div className="grid place-items-center min-h-screen">
       <div className="space-y-1">
         <h1 className="text-2xl font-medium">Join failed</h1>
         <p className="text-muted-foreground">{error}</p>
       </div>
-    </main>
+    </div>
   );
 }

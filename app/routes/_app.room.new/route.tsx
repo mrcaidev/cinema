@@ -15,7 +15,7 @@ import { loadMe } from "@/loaders/me";
 import { generateSalt, hash } from "@/utils/salt";
 import { ChevronLeftIcon, Loader2Icon, PlusIcon } from "lucide-react";
 import { useEffect } from "react";
-import { data, Link, redirect, useFetcher, useLoaderData } from "react-router";
+import { data, Link, redirect, useFetcher } from "react-router";
 import * as v from "valibot";
 import type { Route } from "./+types/route";
 
@@ -76,9 +76,7 @@ export function meta() {
   return [{ title: "New Room | Cinema" }];
 }
 
-export default function NewRoomPage() {
-  const me = useLoaderData<typeof loader>();
-
+export default function NewRoomPage({ loaderData: me }: Route.ComponentProps) {
   const { Form, data, state } = useFetcher();
 
   const { toast } = useToast();
