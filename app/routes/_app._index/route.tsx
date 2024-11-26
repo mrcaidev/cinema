@@ -1,8 +1,9 @@
+import { Button } from "@/components/ui/button";
 import { loadMe } from "@/loaders/me";
+import { PlusIcon, UsersRoundIcon } from "lucide-react";
+import { Link } from "react-router";
 import type { Route } from "./+types/route";
 import { Greeting } from "./greeting";
-import { JoinRoomButton } from "./join-room-button";
-import { NewRoomButton } from "./new-room-button";
 
 export async function loader({ request }: Route.LoaderArgs) {
   return await loadMe(request);
@@ -18,8 +19,18 @@ export default function HomePage() {
       <div className="space-y-5">
         <Greeting />
         <div className="flex justify-center items-center gap-3">
-          <JoinRoomButton />
-          <NewRoomButton />
+          <Button variant="secondary" asChild>
+            <Link to="/room/join">
+              <UsersRoundIcon />
+              Join room
+            </Link>
+          </Button>
+          <Button asChild>
+            <Link to="/room/new">
+              <PlusIcon />
+              New room
+            </Link>
+          </Button>
         </div>
       </div>
     </div>
