@@ -12,8 +12,6 @@ export type UserWithCredentials = User & {
   passwordHash: string;
 };
 
-export type PublicUser = Pick<User, "id" | "nickname" | "avatarUrl">;
-
 export type EmailVerification = {
   id: string;
   email: string;
@@ -22,13 +20,15 @@ export type EmailVerification = {
   verifiedTime: number | null;
 };
 
+export type RoomUser = Pick<User, "id" | "nickname" | "avatarUrl">;
+
 export type Room = {
   id: string;
   slug: string;
   name: string;
-  host: PublicUser;
-  admins: PublicUser[];
-  members: PublicUser[];
+  host: RoomUser;
+  admins: RoomUser[];
+  members: RoomUser[];
   createdTime: number;
   deletedTime: number | null;
 };
