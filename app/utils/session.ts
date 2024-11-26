@@ -24,7 +24,7 @@ export const {
     name: "ev",
     secrets: [process.env.SESSION_SECRET],
     httpOnly: true,
-    maxAge: 10 * 60, // 10 minutes
+    maxAge: 1 * 60 * 60, // 1 hour
     sameSite: "strict",
     secure: true,
   },
