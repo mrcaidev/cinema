@@ -1,19 +1,13 @@
 import type { Server as HttpServer } from "node:http";
 import { Server } from "socket.io";
+import { handleHandshake } from "./handshake";
 
 export function attachSocketServer(httpServer: HttpServer) {
   const io = new Server(httpServer);
 
-  io.on("connection", (socket) => {
-    console.log(socket.id, "connected");
+  io.on("connection", async (socket) => {
+    await handleHandshake(socket);
 
-    socket.emit("confirmation", "connected!");
-
-    socket.on("event", (data) => {
-      console.log(socket.id, data);
-      socket.emit("event", "pong");
-    });
+    socket.on("ping", (callback) => callback());
   });
-
-  return io;
 }
