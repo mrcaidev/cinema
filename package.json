@@ -4,9 +4,9 @@
   "type": "module",
   "packageManager": "pnpm@9.14.2+sha512.6e2baf77d06b9362294152c851c4f278ede37ab1eba3a55fda317a4a17b209f4dbb973fb250a77abc463a341fcb1f17f17cfa24091c4eb319cda0d9b84278387",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development node server.js",
+    "dev": "tsx entry.development.ts",
     "build": "react-router build",
-    "start": "cross-env NODE_ENV=production node server.js",
+    "start": "node entry.production.js",
     "typegen": "react-router typegen",
     "check": "biome check"
   },
@@ -51,7 +51,7 @@
     "@types/node": "^22.9.3",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "cross-env": "^7.0.3",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vite": "^5.4.11",
     "vite-tsconfig-paths": "^5.1.3"
