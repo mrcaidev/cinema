@@ -4,6 +4,7 @@ import { Join, type JoinEntry } from "./join";
 import { Leave, type LeaveEntry } from "./leave";
 import { Message, type MessageEntry } from "./message";
 import { MessageInput } from "./message-input";
+import { Ping } from "./ping";
 
 export type ChatEntry = JoinEntry | LeaveEntry | MessageEntry;
 
@@ -24,7 +25,10 @@ export function Chat() {
 
   return (
     <section className="grow xl:grow-0 flex flex-col xl:min-w-[420px] h-96 xl:h-[calc(100vh-112px)] py-3 rounded-md bg-muted/50">
-      <h2 className="px-4 mb-2 text-lg font-medium">Chat</h2>
+      <div className="flex justify-between items-center px-4 mb-2">
+        <h2 className="text-lg font-medium">Chat</h2>
+        <Ping />
+      </div>
       <hr className="mx-4" />
       <ol className="grow px-4 overflow-auto scrollbar-thin scroll-thumb-rounded scrollbar-thumb-muted">
         {entries.map((chatEntry) =>

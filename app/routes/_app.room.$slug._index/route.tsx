@@ -11,7 +11,6 @@ import { redirect } from "react-router";
 import * as v from "valibot";
 import type { Route } from "./+types/route";
 import { Chat } from "./chat";
-import { Latency } from "./latency";
 import { SocketProvider } from "./socket-context";
 
 const schema = v.object({
@@ -82,7 +81,6 @@ export default function RoomPage({
           <h1>Room {room.name}</h1>
           <p>My nickname: {me.nickname}</p>
           <p>My role: {role}</p>
-          <Latency />
         </section>
         <Chat />
       </div>
