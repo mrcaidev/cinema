@@ -37,7 +37,7 @@ export function Message({ entry }: Props) {
           entry.from.id === me.id ? "items-end" : "items-start",
         )}
       >
-        <p
+        <div
           className={cn(
             "flex items-center gap-2 text-muted-foreground",
             entry.from.id === me.id && "flex-row-reverse",
@@ -57,7 +57,7 @@ export function Message({ entry }: Props) {
           <span className="hidden group-hover:inline text-xs">
             {new Date(entry.sentTime).toLocaleTimeString()}
           </span>
-        </p>
+        </div>
         <p className="max-w-48 sm:max-w-96 xl:max-w-64 px-3 py-2 rounded-md bg-muted break-words">
           {entry.content}
         </p>
