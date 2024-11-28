@@ -38,3 +38,11 @@ export type RoomWithCredentials = Room & {
   passwordSalt: string | null;
   passwordHash: string | null;
 };
+
+export type ClientToServerEvents = {
+  ping: (callback: () => void) => void;
+};
+
+export type ServerToClientEvents = {
+  "user:joined": (user: RoomUser) => void;
+};

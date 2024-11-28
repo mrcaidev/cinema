@@ -1,3 +1,7 @@
+import type {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from "@/common/types";
 import {
   createContext,
   useContext,
@@ -9,15 +13,17 @@ import { useLoaderData } from "react-router";
 import io, { type Socket } from "socket.io-client";
 import type { loader } from "./route";
 
-const context = createContext<Socket | null>(null);
+type ClientSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
+
+const context = createContext<ClientSocket | null>(null);
 
 export function SocketProvider({ children }: PropsWithChildren) {
   const { room, me } = useLoaderData<typeof loader>();
 
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const [socket, setSocket] = useState<ClientSocket | null>(null);
 
   useEffect(() => {
-    const socket = io({
+    const socket: ClientSocket = io({
       query: { roomSlug: room.slug },
       auth: { userId: me.id },
     });

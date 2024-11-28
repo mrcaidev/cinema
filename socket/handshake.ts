@@ -1,6 +1,6 @@
 import { findRoomBySlug } from "@/database/room";
-import type { Socket } from "socket.io";
 import * as v from "valibot";
+import type { Context } from "./types";
 
 const schema = v.object({
   query: v.object({
@@ -14,7 +14,7 @@ const schema = v.object({
   }),
 });
 
-export async function handleHandshake(socket: Socket) {
+export async function handleHandshake({ socket }: Context) {
   const { success, output } = await v.safeParseAsync(schema, socket.handshake);
 
   if (!success) {
@@ -38,21 +38,28 @@ export async function handleHandshake(socket: Socket) {
 
   if (host.id === userId) {
     socket.join(roomSlug);
+    socket.data = { room: roomSlug, user: host };
     return { role: "host" as const };
   }
 
-  if (admins.some((admin) => admin.id === userId)) {
+  const admin = admins.find((admin) => admin.id === userId);
+  if (admin) {
     socket.join(roomSlug);
+    socket.data = { room: roomSlug, user: admin };
     return { role: "admin" as const };
   }
 
-  if (members.some((member) => member.id === userId)) {
+  const member = members.find((member) => member.id === userId);
+  if (member) {
     socket.join(roomSlug);
+    socket.data = { room: roomSlug, user: member };
     return { role: "member" as const };
   }
 
-  if (visitors.some((visitor) => visitor.id === userId)) {
+  const visitor = visitors.find((visitor) => visitor.id === userId);
+  if (visitor) {
     socket.join(roomSlug);
+    socket.data = { room: roomSlug, user: visitor };
     return { role: "visitor" as const };
   }
 
