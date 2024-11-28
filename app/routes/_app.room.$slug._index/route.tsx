@@ -1,5 +1,11 @@
 import { loadMe } from "@/app/loaders/me";
 import { getVisitorSession } from "@/app/utils/session";
+import {
+  findAsAdmin,
+  findAsHost,
+  findAsMember,
+  findAsVisitor,
+} from "@/common/utils";
 import { findRoomBySlug } from "@/database/room";
 import { redirect } from "react-router";
 import * as v from "valibot";
@@ -27,20 +33,18 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     return redirect(`/room/${slug}/join`) as never;
   }
 
-  const { host, admins, members, visitors } = room;
-
   const me = await loadMe(request);
 
   if (me) {
-    if (host.id === me.id) {
+    if (findAsHost(room, me)) {
       return { room, me, role: "host" as const };
     }
 
-    if (admins.some((admin) => admin.id === me.id)) {
+    if (findAsAdmin(room, me)) {
       return { room, me, role: "admin" as const };
     }
 
-    if (members.some((member) => member.id === me.id)) {
+    if (findAsMember(room, me)) {
       return { room, me, role: "member" as const };
     }
 
@@ -51,7 +55,11 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 
   const visitorId = visitorSession.get("id");
 
-  const visitor = visitors.find((v) => v.id === visitorId);
+  if (!visitorId) {
+    return redirect(`/room/${slug}/join`) as never;
+  }
+
+  const visitor = findAsVisitor(room, { id: visitorId });
 
   if (visitor) {
     return { room, me: visitor, role: "visitor" as const };
