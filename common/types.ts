@@ -64,13 +64,28 @@ type MessageSentEvent = {
   sentTime: number;
 };
 
+type VideoImportEvent = {
+  url: string;
+  provider: string;
+  title: string;
+  html: string;
+};
+
+type VideoImportedEvent = VideoImportEvent & {
+  id: string;
+  fromUser: RoomUser;
+  bumpCount: number;
+};
+
 export type ClientToServerEvents = {
   ping: (callback: () => void) => void;
   "message:send": (event: MessageSendEvent, callback: () => void) => void;
+  "video:import": (event: VideoImportEvent, callback: () => void) => void;
 };
 
 export type ServerToClientEvents = {
   "user:joined": (event: UserJoinedEvent) => void;
   "user:left": (event: UserLeftEvent) => void;
   "message:sent": (event: MessageSentEvent) => void;
+  "video:imported": (event: VideoImportedEvent) => void;
 };

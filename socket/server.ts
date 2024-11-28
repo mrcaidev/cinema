@@ -9,6 +9,7 @@ import { handleDisconnect } from "./disconnect";
 import { handleHandshake } from "./handshake";
 import { handleMessageSend } from "./message-send";
 import type { SocketData } from "./types";
+import { handleVideoImport } from "./video-import";
 
 export function attachSocketServer(httpServer: HttpServer) {
   const io = new Server<
@@ -26,6 +27,9 @@ export function attachSocketServer(httpServer: HttpServer) {
     socket.on("ping", (callback) => callback());
     socket.on("message:send", (...args) =>
       handleMessageSend({ io, socket }, ...args),
+    );
+    socket.on("video:import", (...args) =>
+      handleVideoImport({ io, socket }, ...args),
     );
 
     socket.on("disconnect", () => handleDisconnect({ io, socket }));

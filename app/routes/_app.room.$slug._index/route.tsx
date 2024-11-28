@@ -12,6 +12,7 @@ import * as v from "valibot";
 import type { Route } from "./+types/route";
 import { Chat } from "./chat";
 import { Control } from "./control";
+import { Playlist } from "./playlist";
 import { SocketProvider } from "./socket-context";
 import { Video } from "./video";
 
@@ -81,7 +82,10 @@ export default function RoomPage() {
           <Video />
           <Control />
         </div>
-        <Chat />
+        <div className="grow xl:grow-0 grid grid-rows-3 gap-4 xl:w-[420px] h-[calc(100vh-112px)]">
+          <Playlist />
+          <Chat />
+        </div>
       </div>
     </SocketProvider>
   );

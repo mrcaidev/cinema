@@ -56,9 +56,19 @@ export default {
           "0%,70%,100%": { opacity: "1" },
           "20%,50%": { opacity: "0" },
         },
+        "audio-icon-before": {
+          from: { transform: "translateX(-100%)" },
+          to: { transform: "translateX(0)" },
+        },
+        "audio-icon-after": {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(100%)" },
+        },
       },
       animation: {
         "caret-blink": "caret-blink 1.25s ease-out infinite",
+        "audio-icon-before": "audio-icon-before 2s linear infinite",
+        "audio-icon-after": "audio-icon-after 2s linear infinite",
       },
     },
   },

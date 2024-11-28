@@ -1,3 +1,4 @@
+import { MessageSquareIcon } from "lucide-react";
 import { useState } from "react";
 import { useSocketEvent } from "../socket-context";
 import { Join, type JoinEntry } from "./join";
@@ -24,9 +25,12 @@ export function Chat() {
   });
 
   return (
-    <section className="grow xl:grow-0 flex flex-col xl:min-w-[420px] h-96 xl:h-[calc(100vh-112px)] py-3 rounded-md bg-muted/50">
+    <section className="row-span-2 flex flex-col py-3 rounded-md bg-muted/50">
       <div className="flex justify-between items-center px-4 mb-2">
-        <h2 className="text-lg font-medium">Chat</h2>
+        <h2 className="flex items-center gap-2 text-lg font-medium">
+          <MessageSquareIcon className="size-5" />
+          Chat
+        </h2>
         <Ping />
       </div>
       <hr className="mx-4" />

@@ -1,11 +1,17 @@
 export function Video() {
   return (
-    <section className="rounded-md overflow-hidden [&_iframe]:w-full [&_iframe]:aspect-video">
-      <iframe
-        src="//player.bilibili.com/player.html?isOutside=true&aid=80433022&bvid=BV1GJ411x7h7&cid=137649199&p=1"
-        title="Never gonna give you up"
-        allowFullScreen
-      />
+    <section className="rounded-md overflow-hidden [&_*]:!w-full [&_*]:!aspect-video">
+      <div className="grid place-items-center bg-muted/50 text-muted-foreground">
+        No video yet :)
+      </div>
+      {/* <iframe
+        src="https://www.youtube.com/embed/14K_a2kKTxU"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      /> */}
     </section>
   );
 }
