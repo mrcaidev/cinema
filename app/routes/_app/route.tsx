@@ -1,4 +1,4 @@
-import { loadMe } from "@/loaders/me";
+import { loadMe } from "@/app/loaders/me";
 import { Outlet } from "react-router";
 import type { Route } from "./+types/route";
 import { Header } from "./header";

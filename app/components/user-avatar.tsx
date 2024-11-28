@@ -1,4 +1,4 @@
-import type { User } from "@/types";
+import type { User } from "@/app/types";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 type Props = {

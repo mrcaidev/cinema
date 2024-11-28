@@ -1,14 +1,14 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/components/ui/use-toast";
-import { createEmailVerification } from "@/database/email-verification";
-import { findUserByEmail } from "@/database/user";
-import { sendEmail } from "@/utils/email";
+import { Button } from "@/app/components/ui/button";
+import { Input } from "@/app/components/ui/input";
+import { Label } from "@/app/components/ui/label";
+import { useToast } from "@/app/components/ui/use-toast";
+import { createEmailVerification } from "@/app/database/email-verification";
+import { findUserByEmail } from "@/app/database/user";
+import { sendEmail } from "@/app/utils/email";
 import {
   commitEmailVerificationSession,
   getEmailVerificationSession,
-} from "@/utils/session";
+} from "@/app/utils/session";
 import { Loader2Icon, MailIcon } from "lucide-react";
 import { useEffect } from "react";
 import { data, Link, redirect, useFetcher } from "react-router";

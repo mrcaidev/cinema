@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import {
   Card,
   CardContent,
@@ -6,13 +6,13 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/components/ui/use-toast";
-import { createRoom } from "@/database/room";
-import { loadMe } from "@/loaders/me";
-import { generateSalt, hash } from "@/utils/salt";
+} from "@/app/components/ui/card";
+import { Input } from "@/app/components/ui/input";
+import { Label } from "@/app/components/ui/label";
+import { useToast } from "@/app/components/ui/use-toast";
+import { createRoom } from "@/app/database/room";
+import { loadMe } from "@/app/loaders/me";
+import { generateSalt, hash } from "@/app/utils/salt";
 import { ChevronLeftIcon, Loader2Icon, PlusIcon } from "lucide-react";
 import { useEffect } from "react";
 import { data, Link, redirect, useFetcher } from "react-router";

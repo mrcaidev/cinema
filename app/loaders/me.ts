@@ -1,6 +1,6 @@
-import { findUserById } from "@/database/user";
-import type { User } from "@/types";
-import { destroyMeSession, getMeSession } from "@/utils/session";
+import { findUserById } from "@/app/database/user";
+import type { User } from "@/app/types";
+import { destroyMeSession, getMeSession } from "@/app/utils/session";
 import { data, redirect } from "react-router";
 
 type LoadMeOptions<Strict extends boolean> = {

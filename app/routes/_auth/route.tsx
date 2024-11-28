@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { getMeSession } from "@/utils/session";
+import { Button } from "@/app/components/ui/button";
+import { getMeSession } from "@/app/utils/session";
 import { ChevronLeftIcon } from "lucide-react";
 import { Link, Outlet, redirect } from "react-router";
 import type { Route } from "./+types/route";

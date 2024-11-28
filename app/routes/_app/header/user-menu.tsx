@@ -1,12 +1,12 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { UserAvatar } from "@/components/user-avatar";
+} from "@/app/components/ui/dropdown-menu";
+import { UserAvatar } from "@/app/components/user-avatar";
 import { LifeBuoyIcon, LogInIcon, SettingsIcon } from "lucide-react";
 import { Link, useLoaderData } from "react-router";
 import type { loader } from "../route";

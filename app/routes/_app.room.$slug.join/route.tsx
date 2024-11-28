@@ -2,10 +2,10 @@ import {
   admitMemberToRoomById,
   admitVisitorToRoomById,
   findRoomWithCredentialsBySlug,
-} from "@/database/room";
-import { loadMe } from "@/loaders/me";
-import { hash } from "@/utils/salt";
-import { commitVisitorSession, getVisitorSession } from "@/utils/session";
+} from "@/app/database/room";
+import { loadMe } from "@/app/loaders/me";
+import { hash } from "@/app/utils/salt";
+import { commitVisitorSession, getVisitorSession } from "@/app/utils/session";
 import { nanoid } from "nanoid";
 import { data, redirect } from "react-router";
 import * as v from "valibot";

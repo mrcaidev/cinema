@@ -1,4 +1,4 @@
-import type { User, UserWithCredentials } from "@/types";
+import type { User, UserWithCredentials } from "@/app/types";
 import { ObjectId, type WithId } from "mongodb";
 import { db } from "./db";
 

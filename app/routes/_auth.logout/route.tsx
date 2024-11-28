@@ -1,4 +1,4 @@
-import { destroyMeSession, getMeSession } from "@/utils/session";
+import { destroyMeSession, getMeSession } from "@/app/utils/session";
 import { data } from "react-router";
 import type { Route } from "./+types/route";
 

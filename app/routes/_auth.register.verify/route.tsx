@@ -1,16 +1,16 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
-} from "@/components/ui/input-otp";
-import { useToast } from "@/components/ui/use-toast";
+} from "@/app/components/ui/input-otp";
+import { useToast } from "@/app/components/ui/use-toast";
 import {
   findEmailVerificationById,
   verifyEmailVerificationById,
-} from "@/database/email-verification";
-import { getEmailVerificationSession } from "@/utils/session";
+} from "@/app/database/email-verification";
+import { getEmailVerificationSession } from "@/app/utils/session";
 import { Loader2Icon, ShieldCheckIcon } from "lucide-react";
 import { useEffect } from "react";
 import { data, redirect, useFetcher } from "react-router";

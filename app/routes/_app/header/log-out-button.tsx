@@ -1,5 +1,5 @@
-import { cn } from "@/components/ui/cn";
-import type { action } from "@/routes/_auth.logout/route";
+import { cn } from "@/app/components/ui/cn";
+import type { action } from "@/app/routes/_auth.logout/route";
 import { Loader2Icon, LogOutIcon } from "lucide-react";
 import { forwardRef, type HTMLAttributes } from "react";
 import { useFetcher } from "react-router";

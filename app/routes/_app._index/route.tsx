@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { loadMe } from "@/loaders/me";
+import { Button } from "@/app/components/ui/button";
+import { loadMe } from "@/app/loaders/me";
 import { PlusIcon, UsersRoundIcon } from "lucide-react";
 import { Link } from "react-router";
 import type { Route } from "./+types/route";
