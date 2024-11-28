@@ -4,6 +4,7 @@ import { findRoomBySlug } from "@/database/room";
 import { redirect } from "react-router";
 import * as v from "valibot";
 import type { Route } from "./+types/route";
+import { Chat } from "./chat";
 import { Latency } from "./latency";
 import { SocketProvider } from "./socket-context";
 
@@ -68,11 +69,14 @@ export default function RoomPage({
 }: Route.ComponentProps) {
   return (
     <SocketProvider>
-      <div className="pt-20">
-        <h1>Room {room.name}</h1>
-        <p>My nickname: {me.nickname}</p>
-        <p>My role: {role}</p>
-        <Latency />
+      <div className="flex flex-col xl:flex-row gap-6 h-screen pt-20 pb-8">
+        <section className="grow-0 xl:grow">
+          <h1>Room {room.name}</h1>
+          <p>My nickname: {me.nickname}</p>
+          <p>My role: {role}</p>
+          <Latency />
+        </section>
+        <Chat />
       </div>
     </SocketProvider>
   );

@@ -6,6 +6,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useRef,
   useState,
   type PropsWithChildren,
 } from "react";
@@ -40,4 +41,32 @@ export function SocketProvider({ children }: PropsWithChildren) {
 
 export function useSocket() {
   return useContext(context);
+}
+
+export function useSocketEvent<E extends keyof ServerToClientEvents>(
+  eventName: E,
+  handler: (
+    socket: ClientSocket,
+    ...args: Parameters<ServerToClientEvents[E]>
+  ) => ReturnType<ServerToClientEvents[E]>,
+) {
+  const socket = useSocket();
+
+  const handlerRef = useRef(handler);
+  handlerRef.current = handler;
+
+  useEffect(() => {
+    if (!socket) {
+      return;
+    }
+
+    // @ts-ignore This works fine.
+    socket.on<E>(eventName, (...args: Parameters<ServerToClientEvents[E]>) => {
+      handlerRef.current(socket, ...args);
+    });
+
+    return () => {
+      socket.off(eventName);
+    };
+  }, [socket, eventName]);
 }

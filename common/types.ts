@@ -39,10 +39,38 @@ export type RoomWithCredentials = Room & {
   passwordHash: string | null;
 };
 
+type UserJoinedEvent = {
+  id: string;
+  user: RoomUser;
+  joinedTime: number;
+};
+
+type UserLeftEvent = {
+  id: string;
+  user: RoomUser;
+  leftTime: number;
+};
+
+type MessageSendEvent = {
+  id: string;
+  content: string;
+  sentTime: number;
+};
+
+type MessageSentEvent = {
+  id: string;
+  from: RoomUser;
+  content: string;
+  sentTime: number;
+};
+
 export type ClientToServerEvents = {
   ping: (callback: () => void) => void;
+  "message:send": (event: MessageSendEvent, callback: () => void) => void;
 };
 
 export type ServerToClientEvents = {
-  "user:joined": (user: RoomUser) => void;
+  "user:joined": (event: UserJoinedEvent) => void;
+  "user:left": (event: UserLeftEvent) => void;
+  "message:sent": (event: MessageSentEvent) => void;
 };
