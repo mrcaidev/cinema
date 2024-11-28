@@ -1,4 +1,4 @@
-import type { EmailVerification } from "@/app/types";
+import type { EmailVerification } from "@/common/types";
 import { ObjectId, type WithId } from "mongodb";
 import { db } from "./db";
 

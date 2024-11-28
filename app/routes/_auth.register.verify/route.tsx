@@ -6,11 +6,11 @@ import {
   InputOTPSlot,
 } from "@/app/components/ui/input-otp";
 import { useToast } from "@/app/components/ui/use-toast";
+import { getEmailVerificationSession } from "@/app/utils/session";
 import {
   findEmailVerificationById,
   verifyEmailVerificationById,
-} from "@/app/database/email-verification";
-import { getEmailVerificationSession } from "@/app/utils/session";
+} from "@/database/email-verification";
 import { Loader2Icon, ShieldCheckIcon } from "lucide-react";
 import { useEffect } from "react";
 import { data, redirect, useFetcher } from "react-router";

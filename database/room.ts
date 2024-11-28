@@ -1,4 +1,4 @@
-import type { Room, RoomUser, RoomWithCredentials } from "@/app/types";
+import type { Room, RoomUser, RoomWithCredentials } from "@/common/types";
 import { ObjectId, type WithId } from "mongodb";
 import { nanoid } from "nanoid";
 import { db } from "./db";

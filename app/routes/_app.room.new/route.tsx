@@ -10,9 +10,9 @@ import {
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { useToast } from "@/app/components/ui/use-toast";
-import { createRoom } from "@/app/database/room";
 import { loadMe } from "@/app/loaders/me";
 import { generateSalt, hash } from "@/app/utils/salt";
+import { createRoom } from "@/database/room";
 import { ChevronLeftIcon, Loader2Icon, PlusIcon } from "lucide-react";
 import { useEffect } from "react";
 import { data, Link, redirect, useFetcher } from "react-router";

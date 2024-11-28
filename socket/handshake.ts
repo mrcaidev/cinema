@@ -1,4 +1,4 @@
-import { findRoomBySlug } from "@/app/database/room";
+import { findRoomBySlug } from "@/database/room";
 import type { Socket } from "socket.io";
 import * as v from "valibot";
 

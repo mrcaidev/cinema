@@ -2,8 +2,6 @@ import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { useToast } from "@/app/components/ui/use-toast";
-import { findEmailVerificationById } from "@/app/database/email-verification";
-import { createUser } from "@/app/database/user";
 import { generateSalt, hash } from "@/app/utils/salt";
 import {
   commitMeSession,
@@ -11,6 +9,8 @@ import {
   getEmailVerificationSession,
   getMeSession,
 } from "@/app/utils/session";
+import { findEmailVerificationById } from "@/database/email-verification";
+import { createUser } from "@/database/user";
 import { FlagIcon, Loader2Icon } from "lucide-react";
 import { useEffect } from "react";
 import { data, redirect, useFetcher } from "react-router";

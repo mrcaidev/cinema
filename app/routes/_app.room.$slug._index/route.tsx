@@ -1,6 +1,6 @@
-import { findRoomBySlug } from "@/app/database/room";
 import { loadMe } from "@/app/loaders/me";
 import { getVisitorSession } from "@/app/utils/session";
+import { findRoomBySlug } from "@/database/room";
 import { redirect } from "react-router";
 import * as v from "valibot";
 import type { Route } from "./+types/route";
