@@ -11,7 +11,9 @@ import { redirect } from "react-router";
 import * as v from "valibot";
 import type { Route } from "./+types/route";
 import { Chat } from "./chat";
+import { Control } from "./control";
 import { SocketProvider } from "./socket-context";
+import { Video } from "./video";
 
 const schema = v.object({
   slug: v.pipe(v.string(), v.nanoid(), v.length(10)),
@@ -71,17 +73,14 @@ export function meta({ data }: Route.MetaArgs) {
   return [{ title: `${data.room.name} | Cinema` }];
 }
 
-export default function RoomPage({
-  loaderData: { room, me, role },
-}: Route.ComponentProps) {
+export default function RoomPage() {
   return (
     <SocketProvider>
-      <div className="flex flex-col xl:flex-row gap-6 h-screen pt-20 pb-8">
-        <section className="grow-0 xl:grow">
-          <h1>Room {room.name}</h1>
-          <p>My nickname: {me.nickname}</p>
-          <p>My role: {role}</p>
-        </section>
+      <div className="flex flex-col xl:flex-row gap-6 min-h-screen pt-20 pb-8">
+        <div className="grow-0 xl:grow space-y-4">
+          <Video />
+          <Control />
+        </div>
         <Chat />
       </div>
     </SocketProvider>
