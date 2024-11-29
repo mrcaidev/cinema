@@ -7,5 +7,9 @@ export function handlePlaylistUpvote(
 ) {
   const [event] = args;
 
+  if (socket.data.user.role === "visitor") {
+    return;
+  }
+
   io.to(socket.data.room).emit("playlist:upvoted", event);
 }

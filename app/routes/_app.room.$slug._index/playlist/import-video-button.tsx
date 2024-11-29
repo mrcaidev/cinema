@@ -19,12 +19,15 @@ import {
   XIcon,
 } from "lucide-react";
 import { useEffect, useState, type MouseEvent } from "react";
-import { useFetcher } from "react-router";
+import { useFetcher, useLoaderData } from "react-router";
 import type { action } from "../../api.video-parser/route";
+import type { loader } from "../route";
 import { useSocket } from "../socket-context";
 import { DEFAULT_PARSER_OUTPUT, type ParserOutput } from "./parser";
 
 export function ImportVideoButton() {
+  const { role } = useLoaderData<typeof loader>();
+
   const { data, state, submit } = useFetcher<typeof action>();
 
   const [videoUrl, setVideoUrl] = useState("");
@@ -75,6 +78,10 @@ export function ImportVideoButton() {
     setIsImporting(false);
     setIsDrawerOpen(false);
   };
+
+  if (role === "visitor") {
+    return null;
+  }
 
   return (
     <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>

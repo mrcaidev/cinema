@@ -6,6 +6,8 @@ import {
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
 import { EllipsisVerticalIcon, ListXIcon } from "lucide-react";
+import { useLoaderData } from "react-router";
+import type { loader } from "../route";
 import type { PlaylistEntry } from "./types";
 import { UpvoteButton } from "./upvote-button";
 
@@ -15,6 +17,8 @@ type Props = {
 };
 
 export function PlaylistItem({ entry, index }: Props) {
+  const { role } = useLoaderData<typeof loader>();
+
   return (
     <div className="group flex items-center gap-3 px-2 py-1.5 rounded">
       <div className="shrink-0 w-4 text-muted-foreground text-center">
@@ -26,24 +30,26 @@ export function PlaylistItem({ entry, index }: Props) {
           from {entry.fromUser.nickname}
         </p>
       </div>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <EllipsisVerticalIcon />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <UpvoteButton id={entry.id} upvotedUserIds={entry.upvotedUserIds} />
-          <DropdownMenuItem className="cursor-pointer">
-            <ListXIcon />
-            Remove
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      {role !== "visitor" && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <EllipsisVerticalIcon />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <UpvoteButton id={entry.id} upvotedUserIds={entry.upvotedUserIds} />
+            <DropdownMenuItem className="cursor-pointer">
+              <ListXIcon />
+              Remove
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
     </div>
   );
 }
