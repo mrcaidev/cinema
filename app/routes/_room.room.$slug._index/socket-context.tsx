@@ -61,7 +61,7 @@ export function useSocketEvent<E extends keyof ServerToClientEvents>(
     }
 
     // @ts-ignore This works fine.
-    socket.on<E>(eventName, (...args: Parameters<ServerToClientEvents[E]>) => {
+    socket.on(eventName, (...args: Parameters<ServerToClientEvents[E]>) => {
       handlerRef.current(socket, ...args);
     });
 

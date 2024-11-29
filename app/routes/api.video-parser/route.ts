@@ -1,6 +1,6 @@
 import { data } from "react-router";
 import * as v from "valibot";
-import { parseVideoUrl } from "../_app.room.$slug._index/playlist/parser";
+import { parseVideoUrl } from "../_room.room.$slug._index/playlist/parser";
 import type { Route } from "./+types/route";
 
 const schema = v.object({
