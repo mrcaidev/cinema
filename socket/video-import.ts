@@ -15,7 +15,7 @@ export async function handleVideoImport(
     ...event,
     id: nanoid(),
     fromUser: socket.data.user,
-    bumpCount: 0,
+    upvotedUserIds: [],
   });
 
   callback();

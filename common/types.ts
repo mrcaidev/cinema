@@ -71,13 +71,21 @@ type VideoImportEvent = {
 type VideoImportedEvent = VideoImportEvent & {
   id: string;
   fromUser: RoomUser;
-  bumpCount: number;
+  upvotedUserIds: string[];
 };
+
+type VideoUpvoteEvent = {
+  id: string;
+  upvotedUserIds: string[];
+};
+
+type VideoUpvotedEvent = VideoUpvoteEvent;
 
 export type ClientToServerEvents = {
   ping: (callback: () => void) => void;
   "message:send": (event: MessageSendEvent, callback: () => void) => void;
   "video:import": (event: VideoImportEvent, callback: () => void) => void;
+  "video:upvote": (event: VideoUpvoteEvent) => void;
 };
 
 export type ServerToClientEvents = {
@@ -85,4 +93,5 @@ export type ServerToClientEvents = {
   "user:left": (event: UserLeftEvent) => void;
   "message:sent": (event: MessageSentEvent) => void;
   "video:imported": (event: VideoImportedEvent) => void;
+  "video:upvoted": (event: VideoUpvotedEvent) => void;
 };

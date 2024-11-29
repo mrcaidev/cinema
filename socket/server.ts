@@ -11,6 +11,7 @@ import { handleMessageSend } from "./message-send";
 import { handlePing } from "./ping";
 import type { Context, SocketData } from "./types";
 import { handleVideoImport } from "./video-import";
+import { handleVideoUpvote } from "./video-upvote";
 
 export function createServer(httpServer: HttpServer) {
   const io = new Server<
@@ -34,6 +35,9 @@ export function createServer(httpServer: HttpServer) {
     });
     socket.on("video:import", (...args) => {
       handleVideoImport(context, ...args);
+    });
+    socket.on("video:upvote", (...args) => {
+      handleVideoUpvote(context, ...args);
     });
     socket.on("disconnect", () => {
       handleDisconnect(context);

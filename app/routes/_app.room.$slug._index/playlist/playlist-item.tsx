@@ -1,7 +1,13 @@
 import { Button } from "@/app/components/ui/button";
-import { cn } from "@/app/components/ui/cn";
-import { ArrowBigUpIcon } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/app/components/ui/dropdown-menu";
+import { EllipsisVerticalIcon, ListXIcon } from "lucide-react";
 import type { PlaylistEntry } from "./types";
+import { UpvoteButton } from "./upvote-button";
 
 type Props = {
   entry: PlaylistEntry;
@@ -20,17 +26,24 @@ export function PlaylistItem({ entry, index }: Props) {
           from {entry.fromUser.nickname}
         </p>
       </div>
-      <div
-        className={cn(entry.bumpCount === 0 && "invisible group-hover:visible")}
-      >
-        <Button
-          variant="ghost"
-          className="gap-1 [&_svg]:size-5 px-2 text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowBigUpIcon />
-          {entry.bumpCount}
-        </Button>
-      </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <EllipsisVerticalIcon />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <UpvoteButton id={entry.id} upvotedUserIds={entry.upvotedUserIds} />
+          <DropdownMenuItem className="cursor-pointer">
+            <ListXIcon />
+            Remove
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }

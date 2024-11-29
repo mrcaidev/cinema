@@ -6,5 +6,5 @@ export type PlaylistEntry = {
   title: string;
   html: string;
   fromUser: RoomUser;
-  bumpCount: number;
+  upvotedUserIds: string[];
 };
