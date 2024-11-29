@@ -1,4 +1,9 @@
-import type { Room, RoomUser, RoomWithCredentials } from "@/common/types";
+import type {
+  PlaylistEntry,
+  Room,
+  RoomUser,
+  RoomWithCredentials,
+} from "@/common/types";
 import { ObjectId, type WithId } from "mongodb";
 import { nanoid } from "nanoid";
 import { db } from "./db";
@@ -39,6 +44,7 @@ export async function createRoom(dto: CreateRoomDto) {
     admins: [],
     members: [],
     visitors: [],
+    playlist: [],
     createdTime: Date.now(),
     deletedTime: null,
   };
@@ -65,6 +71,41 @@ export async function admitVisitorToRoomById(id: string, visitorId: string) {
   await collection.updateOne(
     { _id: new ObjectId(id) },
     { $push: { visitors: visitor } },
+  );
+}
+
+type AddPlaylistEntryToRoomBySlugDto = Pick<
+  PlaylistEntry,
+  "url" | "provider" | "title" | "html" | "fromUser"
+>;
+
+export async function addPlaylistEntryToRoomBySlug(
+  slug: string,
+  dto: AddPlaylistEntryToRoomBySlugDto,
+) {
+  const entry: PlaylistEntry = {
+    ...dto,
+    id: nanoid(),
+    upvotedUserIds: [],
+  };
+
+  await collection.updateOne({ slug }, { $push: { playlist: entry } });
+
+  return entry;
+}
+
+type UpdateUpvotedUserIdsInRoomBySlugDto = {
+  id: string;
+  upvotedUserIds: string[];
+};
+
+export async function updateUpvotedUserIdsInRoomBySlug(
+  slug: string,
+  dto: UpdateUpvotedUserIdsInRoomBySlugDto,
+) {
+  await collection.updateOne(
+    { slug, "playlist.id": dto.id },
+    { $set: { "playlist.$.upvotedUserIds": dto.upvotedUserIds } },
   );
 }
 

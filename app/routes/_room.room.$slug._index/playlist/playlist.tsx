@@ -1,6 +1,8 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { ListVideo } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useLoaderData } from "react-router";
+import type { loader } from "../route";
 import { useSocketEvent } from "../socket-context";
 import { CurrentItem } from "./current-item";
 import { ImportVideoButton } from "./import-video-button";
@@ -8,56 +10,9 @@ import { PlaylistItem } from "./playlist-item";
 import type { PlaylistEntry } from "./types";
 
 export function Playlist() {
-  const [entries, setEntries] = useState<PlaylistEntry[]>([
-    {
-      id: "test1",
-      provider: "bilibili",
-      title: "Test 1",
-      html: "",
-      fromUser: {
-        id: "user1",
-        nickname: "user1",
-        avatarUrl: null,
-      },
-      upvotedUserIds: [],
-    },
-    {
-      id: "test2",
-      provider: "bilibili",
-      title: "Test 2",
-      html: "",
-      fromUser: {
-        id: "user1",
-        nickname: "user1",
-        avatarUrl: null,
-      },
-      upvotedUserIds: [],
-    },
-    {
-      id: "test3",
-      provider: "bilibili",
-      title: "Test 3",
-      html: "",
-      fromUser: {
-        id: "user1",
-        nickname: "user1",
-        avatarUrl: null,
-      },
-      upvotedUserIds: [],
-    },
-    {
-      id: "test4",
-      provider: "bilibili",
-      title: "Test 4",
-      html: "",
-      fromUser: {
-        id: "user1",
-        nickname: "user1",
-        avatarUrl: null,
-      },
-      upvotedUserIds: [],
-    },
-  ]);
+  const { room } = useLoaderData<typeof loader>();
+
+  const [entries, setEntries] = useState<PlaylistEntry[]>(room.playlist);
 
   const prioritizedCandidates = useMemo(
     () =>

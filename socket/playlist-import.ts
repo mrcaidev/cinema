@@ -1,5 +1,5 @@
 import type { ClientToServerEvents } from "@/common/types";
-import { nanoid } from "nanoid";
+import { addPlaylistEntryToRoomBySlug } from "@/database/room";
 import type { Context } from "./types";
 
 export async function handlePlaylistImport(
@@ -8,12 +8,16 @@ export async function handlePlaylistImport(
 ) {
   const [event, callback] = args;
 
-  io.to(socket.data.room).emit("playlist:imported", {
+  if (socket.data.user.role === "visitor") {
+    return;
+  }
+
+  const entry = await addPlaylistEntryToRoomBySlug(socket.data.room, {
     ...event,
-    id: nanoid(),
     fromUser: socket.data.user,
-    upvotedUserIds: [],
   });
+
+  io.to(socket.data.room).emit("playlist:imported", entry);
 
   callback();
 }

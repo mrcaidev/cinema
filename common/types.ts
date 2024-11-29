@@ -22,6 +22,16 @@ export type EmailVerification = {
 
 export type RoomUser = Pick<User, "id" | "nickname" | "avatarUrl">;
 
+export type PlaylistEntry = {
+  id: string;
+  url: string;
+  provider: string;
+  title: string;
+  html: string;
+  fromUser: RoomUser;
+  upvotedUserIds: string[];
+};
+
 export type Room = {
   id: string;
   slug: string;
@@ -30,6 +40,7 @@ export type Room = {
   admins: RoomUser[];
   members: RoomUser[];
   visitors: RoomUser[];
+  playlist: PlaylistEntry[];
   createdTime: number;
   deletedTime: number | null;
 };

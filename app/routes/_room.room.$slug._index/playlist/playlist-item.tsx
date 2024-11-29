@@ -36,7 +36,7 @@ export function PlaylistItem({ entry, index }: Props) {
             <Button
               variant="ghost"
               size="icon"
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              className="shrink-0 text-muted-foreground hover:text-foreground transition-colors"
             >
               <EllipsisVerticalIcon />
             </Button>
