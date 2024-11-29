@@ -1,6 +1,5 @@
 import type { ClientToServerEvents } from "@/common/types";
 import type { Context } from "./types";
-import { getRoom } from "./utils";
 
 export async function handleMessageSend(
   { socket }: Context,
@@ -8,9 +7,7 @@ export async function handleMessageSend(
 ) {
   const [event, callback] = args;
 
-  const room = getRoom(socket);
-
-  socket.broadcast.to(room).emit("message:sent", {
+  socket.broadcast.to(socket.data.room).emit("message:sent", {
     ...event,
     fromUser: socket.data.user,
   });
