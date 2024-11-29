@@ -9,7 +9,7 @@ import type { loader } from "../route";
 export type MessageEntry = {
   type: "message";
   id: string;
-  from: RoomUser;
+  fromUser: RoomUser;
   content: string;
   sentTime: number;
   isWaitingForAck?: boolean;
@@ -27,33 +27,33 @@ export function Message({ entry }: Props) {
       className={cn(
         "group flex gap-2",
         entry.isWaitingForAck && "opacity-50",
-        entry.from.id === me.id && "flex-row-reverse",
+        entry.fromUser.id === me.id && "flex-row-reverse",
       )}
     >
-      <UserAvatar user={entry.from} className="translate-y-0.5" />
+      <UserAvatar user={entry.fromUser} className="translate-y-0.5" />
       <div
         className={cn(
           "flex flex-col gap-1",
-          entry.from.id === me.id ? "items-end" : "items-start",
+          entry.fromUser.id === me.id ? "items-end" : "items-start",
         )}
       >
         <div
           className={cn(
             "flex items-center gap-2 text-muted-foreground",
-            entry.from.id === me.id && "flex-row-reverse",
+            entry.fromUser.id === me.id && "flex-row-reverse",
           )}
         >
-          {findHostById(room, entry.from.id) && (
+          {findHostById(room, entry.fromUser.id) && (
             <Badge className="px-2 rounded bg-yellow-600/80 pointer-events-none">
               HOST
             </Badge>
           )}
-          {findAdminById(room, entry.from.id) && (
+          {findAdminById(room, entry.fromUser.id) && (
             <Badge className="px-2 rounded bg-green-600/80 pointer-events-none">
               ADMIN
             </Badge>
           )}
-          <span className="text-sm">{entry.from.nickname}</span>
+          <span className="text-sm">{entry.fromUser.nickname}</span>
           <span className="hidden group-hover:inline text-xs">
             {new Date(entry.sentTime).toLocaleTimeString()}
           </span>

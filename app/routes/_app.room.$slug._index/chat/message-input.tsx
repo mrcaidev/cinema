@@ -44,7 +44,7 @@ export function MessageInput({ setEntries }: Props) {
       {
         type: "message" as const,
         id,
-        from: me,
+        fromUser: me,
         content,
         sentTime,
         isWaitingForAck: true,

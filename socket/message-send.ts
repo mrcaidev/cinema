@@ -6,15 +6,13 @@ export async function handleMessageSend(
   { socket }: Context,
   ...args: Parameters<ClientToServerEvents["message:send"]>
 ) {
-  const [{ id, content, sentTime }, callback] = args;
+  const [event, callback] = args;
 
   const room = getRoom(socket);
 
   socket.broadcast.to(room).emit("message:sent", {
-    id,
-    from: socket.data.user,
-    content,
-    sentTime,
+    ...event,
+    fromUser: socket.data.user,
   });
 
   callback();

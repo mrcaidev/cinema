@@ -57,11 +57,8 @@ type MessageSendEvent = {
   sentTime: number;
 };
 
-type MessageSentEvent = {
-  id: string;
-  from: RoomUser;
-  content: string;
-  sentTime: number;
+type MessageSentEvent = MessageSendEvent & {
+  fromUser: RoomUser;
 };
 
 type VideoImportEvent = {
