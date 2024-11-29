@@ -1,10 +1,10 @@
 import { loadMe } from "@/app/loaders/me";
 import { getVisitorSession } from "@/app/utils/session";
 import {
-  findAsAdmin,
-  findAsHost,
-  findAsMember,
-  findAsVisitor,
+  findAdminById,
+  findHostById,
+  findMemberById,
+  findVisitorById,
 } from "@/common/utils";
 import { findRoomBySlug } from "@/database/room";
 import { redirect } from "react-router";
@@ -38,15 +38,15 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const me = await loadMe(request);
 
   if (me) {
-    if (findAsHost(room, me)) {
+    if (findHostById(room, me.id)) {
       return { room, me, role: "host" as const };
     }
 
-    if (findAsAdmin(room, me)) {
+    if (findAdminById(room, me.id)) {
       return { room, me, role: "admin" as const };
     }
 
-    if (findAsMember(room, me)) {
+    if (findMemberById(room, me.id)) {
       return { room, me, role: "member" as const };
     }
 
@@ -61,7 +61,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     return redirect(`/room/${slug}/join`) as never;
   }
 
-  const visitor = findAsVisitor(room, { id: visitorId });
+  const visitor = findVisitorById(room, visitorId);
 
   if (visitor) {
     return { room, me: visitor, role: "visitor" as const };

@@ -1,8 +1,8 @@
 import {
-  findAsAdmin,
-  findAsHost,
-  findAsMember,
-  findAsVisitor,
+  findAdminById,
+  findHostById,
+  findMemberById,
+  findVisitorById,
 } from "@/common/utils";
 import { findRoomBySlug } from "@/database/room";
 import * as v from "valibot";
@@ -40,28 +40,28 @@ export async function handleHandshake({ socket }: Context) {
     return;
   }
 
-  const host = findAsHost(room, { id: userId });
+  const host = findHostById(room, userId);
   if (host) {
     socket.join(roomSlug);
     socket.data = { user: { ...host, role: "host" } };
     return;
   }
 
-  const admin = findAsAdmin(room, { id: userId });
+  const admin = findAdminById(room, userId);
   if (admin) {
     socket.join(roomSlug);
     socket.data = { user: { ...admin, role: "admin" } };
     return;
   }
 
-  const member = findAsMember(room, { id: userId });
+  const member = findMemberById(room, userId);
   if (member) {
     socket.join(roomSlug);
     socket.data = { user: { ...member, role: "member" } };
     return;
   }
 
-  const visitor = findAsVisitor(room, { id: userId });
+  const visitor = findVisitorById(room, userId);
   if (visitor) {
     socket.join(roomSlug);
     socket.data = { user: { ...visitor, role: "visitor" } };

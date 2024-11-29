@@ -2,7 +2,7 @@ import { Badge } from "@/app/components/ui/badge";
 import { cn } from "@/app/components/ui/cn";
 import { UserAvatar } from "@/app/components/user-avatar";
 import type { RoomUser } from "@/common/types";
-import { findAsAdmin, findAsHost } from "@/common/utils";
+import { findAdminById, findHostById } from "@/common/utils";
 import { useLoaderData } from "react-router";
 import type { loader } from "../route";
 
@@ -43,12 +43,12 @@ export function Message({ entry }: Props) {
             entry.from.id === me.id && "flex-row-reverse",
           )}
         >
-          {findAsHost(room, entry.from) && (
+          {findHostById(room, entry.from.id) && (
             <Badge className="px-2 rounded bg-yellow-600/80 pointer-events-none">
               HOST
             </Badge>
           )}
-          {findAsAdmin(room, entry.from) && (
+          {findAdminById(room, entry.from.id) && (
             <Badge className="px-2 rounded bg-green-600/80 pointer-events-none">
               ADMIN
             </Badge>
