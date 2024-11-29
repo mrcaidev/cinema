@@ -43,29 +43,29 @@ export async function handleHandshake({ socket }: Context) {
   const host = findAsHost(room, { id: userId });
   if (host) {
     socket.join(roomSlug);
-    socket.data = { user: host };
-    return { role: "host" as const };
+    socket.data = { user: { ...host, role: "host" } };
+    return;
   }
 
   const admin = findAsAdmin(room, { id: userId });
   if (admin) {
     socket.join(roomSlug);
-    socket.data = { user: admin };
-    return { role: "admin" as const };
+    socket.data = { user: { ...admin, role: "admin" } };
+    return;
   }
 
   const member = findAsMember(room, { id: userId });
   if (member) {
     socket.join(roomSlug);
-    socket.data = { user: member };
-    return { role: "member" as const };
+    socket.data = { user: { ...member, role: "member" } };
+    return;
   }
 
   const visitor = findAsVisitor(room, { id: userId });
   if (visitor) {
     socket.join(roomSlug);
-    socket.data = { user: visitor };
-    return { role: "visitor" as const };
+    socket.data = { user: { ...visitor, role: "visitor" } };
+    return;
   }
 
   socket.disconnect();

@@ -6,7 +6,7 @@ import type {
 import type { DefaultEventsMap, Server, Socket } from "socket.io";
 
 export type SocketData = {
-  user: RoomUser;
+  user: RoomUser & { role: "host" | "admin" | "member" | "visitor" };
 };
 
 export type IO = Server<
