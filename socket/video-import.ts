@@ -1,6 +1,7 @@
 import type { ClientToServerEvents } from "@/common/types";
 import { nanoid } from "nanoid";
 import type { Context } from "./types";
+import { getRoom } from "./utils";
 
 export async function handleVideoImport(
   { io, socket }: Context,
@@ -8,7 +9,9 @@ export async function handleVideoImport(
 ) {
   const [event, callback] = args;
 
-  io.to(socket.data.room).emit("video:imported", {
+  const room = getRoom(socket);
+
+  io.to(room).emit("video:imported", {
     ...event,
     id: nanoid(),
     fromUser: socket.data.user,

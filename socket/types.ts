@@ -6,7 +6,6 @@ import type {
 import type { DefaultEventsMap, Server, Socket } from "socket.io";
 
 export type SocketData = {
-  room: string;
   user: RoomUser;
 };
 
