@@ -9,9 +9,9 @@ import { handleDisconnect } from "./disconnect";
 import { handleHandshake } from "./handshake";
 import { handleMessageSend } from "./message-send";
 import { handlePing } from "./ping";
+import { handlePlaylistImport } from "./playlist-import";
+import { handlePlaylistUpvote } from "./playlist-upvote";
 import type { Context, SocketData } from "./types";
-import { handleVideoImport } from "./video-import";
-import { handleVideoUpvote } from "./video-upvote";
 
 export function createServer(httpServer: HttpServer) {
   const io = new Server<
@@ -33,11 +33,11 @@ export function createServer(httpServer: HttpServer) {
     socket.on("message:send", (...args) => {
       handleMessageSend(context, ...args);
     });
-    socket.on("video:import", (...args) => {
-      handleVideoImport(context, ...args);
+    socket.on("playlist:import", (...args) => {
+      handlePlaylistImport(context, ...args);
     });
-    socket.on("video:upvote", (...args) => {
-      handleVideoUpvote(context, ...args);
+    socket.on("playlist:upvote", (...args) => {
+      handlePlaylistUpvote(context, ...args);
     });
     socket.on("disconnect", () => {
       handleDisconnect(context);

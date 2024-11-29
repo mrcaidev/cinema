@@ -2,8 +2,8 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { ListVideo } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useSocketEvent } from "../socket-context";
-import { AddVideoButton } from "./add-video-button";
 import { CurrentItem } from "./current-item";
+import { ImportVideoButton } from "./import-video-button";
 import { PlaylistItem } from "./playlist-item";
 import type { PlaylistEntry } from "./types";
 
@@ -68,11 +68,11 @@ export function Playlist() {
   );
   const [playlistRef] = useAutoAnimate();
 
-  useSocketEvent("video:imported", (_, event) => {
+  useSocketEvent("playlist:imported", (_, event) => {
     setEntries((entries) => [...entries, event]);
   });
 
-  useSocketEvent("video:upvoted", (_, event) => {
+  useSocketEvent("playlist:upvoted", (_, event) => {
     const { id, upvotedUserIds } = event;
     setEntries((entries) => {
       const index = entries.findIndex((entry) => entry.id === id);
@@ -94,7 +94,7 @@ export function Playlist() {
           <ListVideo className="size-5" />
           Playlist
         </h2>
-        <AddVideoButton />
+        <ImportVideoButton />
       </div>
       <hr className="mx-4" />
       <ol

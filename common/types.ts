@@ -61,37 +61,37 @@ type MessageSentEvent = MessageSendEvent & {
   fromUser: RoomUser;
 };
 
-type VideoImportEvent = {
+type PlaylistImportEvent = {
   url: string;
   provider: string;
   title: string;
   html: string;
 };
 
-type VideoImportedEvent = VideoImportEvent & {
+type PlaylistImportedEvent = PlaylistImportEvent & {
   id: string;
   fromUser: RoomUser;
   upvotedUserIds: string[];
 };
 
-type VideoUpvoteEvent = {
+type PlaylistUpvoteEvent = {
   id: string;
   upvotedUserIds: string[];
 };
 
-type VideoUpvotedEvent = VideoUpvoteEvent;
+type PlaylistUpvotedEvent = PlaylistUpvoteEvent;
 
 export type ClientToServerEvents = {
   ping: (callback: () => void) => void;
   "message:send": (event: MessageSendEvent, callback: () => void) => void;
-  "video:import": (event: VideoImportEvent, callback: () => void) => void;
-  "video:upvote": (event: VideoUpvoteEvent) => void;
+  "playlist:import": (event: PlaylistImportEvent, callback: () => void) => void;
+  "playlist:upvote": (event: PlaylistUpvoteEvent) => void;
 };
 
 export type ServerToClientEvents = {
   "user:joined": (event: UserJoinedEvent) => void;
   "user:left": (event: UserLeftEvent) => void;
   "message:sent": (event: MessageSentEvent) => void;
-  "video:imported": (event: VideoImportedEvent) => void;
-  "video:upvoted": (event: VideoUpvotedEvent) => void;
+  "playlist:imported": (event: PlaylistImportedEvent) => void;
+  "playlist:upvoted": (event: PlaylistUpvotedEvent) => void;
 };

@@ -23,7 +23,7 @@ export function UpvoteButton({ id, upvotedUserIds }: Props) {
       return;
     }
 
-    socket.emit("video:upvote", {
+    socket.emit("playlist:upvote", {
       id,
       upvotedUserIds: isUpvoted
         ? upvotedUserIds.toSpliced(upvotedIndex, 1)

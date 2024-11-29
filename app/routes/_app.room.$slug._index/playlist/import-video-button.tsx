@@ -24,7 +24,7 @@ import type { action } from "../../api.video-parser/route";
 import { useSocket } from "../socket-context";
 import { DEFAULT_PARSER_OUTPUT, type ParserOutput } from "./parser";
 
-export function AddVideoButton() {
+export function ImportVideoButton() {
   const { data, state, submit } = useFetcher<typeof action>();
 
   const [videoUrl, setVideoUrl] = useState("");
@@ -66,7 +66,7 @@ export function AddVideoButton() {
     const { html, provider, title } = parserOutput;
 
     setIsImporting(true);
-    await socket.emitWithAck("video:import", {
+    await socket.emitWithAck("playlist:import", {
       url: videoUrl,
       provider,
       title,
