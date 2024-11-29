@@ -45,9 +45,9 @@ export function InviteButton() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="secondary">
+        <Button variant="secondary" className="w-10 sm:w-auto">
           <UserRoundPlusIcon />
-          Invite
+          <span className="sr-only sm:not-sr-only">Invite</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="space-y-2">

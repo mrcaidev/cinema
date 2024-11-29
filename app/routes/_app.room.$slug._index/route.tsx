@@ -11,8 +11,8 @@ import { redirect } from "react-router";
 import * as v from "valibot";
 import type { Route } from "./+types/route";
 import { Chat } from "./chat";
-import { Control } from "./control";
 import { Playlist } from "./playlist";
+import { RoomInfo } from "./room-info";
 import { SocketProvider } from "./socket-context";
 import { Video } from "./video";
 
@@ -77,10 +77,10 @@ export function meta({ data }: Route.MetaArgs) {
 export default function RoomPage() {
   return (
     <SocketProvider>
-      <div className="flex flex-col xl:flex-row gap-6 min-h-screen pt-20 pb-8">
+      <div className="flex flex-col xl:flex-row gap-4 min-h-screen pt-20 pb-8">
         <div className="grow-0 xl:grow space-y-4">
           <Video />
-          <Control />
+          <RoomInfo />
         </div>
         <div className="grow xl:grow-0 grid grid-rows-3 gap-4 xl:w-[420px] h-[calc(100vh-112px)]">
           <Playlist />
