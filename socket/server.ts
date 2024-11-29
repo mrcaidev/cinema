@@ -11,7 +11,7 @@ import { handleMessageSend } from "./message-send";
 import type { SocketData } from "./types";
 import { handleVideoImport } from "./video-import";
 
-export function attachSocketServer(httpServer: HttpServer) {
+export function createServer(httpServer: HttpServer) {
   const io = new Server<
     ClientToServerEvents,
     ServerToClientEvents,
