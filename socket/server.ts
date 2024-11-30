@@ -1,13 +1,13 @@
 import type { Server as HttpServer } from "node:http";
 import { Server } from "socket.io";
-import { handleConnect } from "./connect";
-import { handleDisconnect } from "./disconnect";
-import { handleMessageSend } from "./message-send";
+import { handleConnect } from "./handlers/connect";
+import { handleDisconnect } from "./handlers/disconnect";
+import { handleMessageSend } from "./handlers/message-send";
+import { handlePing } from "./handlers/ping";
+import { handlePlaylistImport } from "./handlers/playlist-import";
+import { handlePlaylistRemove } from "./handlers/playlist-remove";
+import { handlePlaylistUpvote } from "./handlers/playlist-upvote";
 import { auth } from "./middleware/auth";
-import { handlePing } from "./ping";
-import { handlePlaylistImport } from "./playlist-import";
-import { handlePlaylistRemove } from "./playlist-remove";
-import { handlePlaylistUpvote } from "./playlist-upvote";
 import type { Context, IO } from "./types";
 
 export function createServer(httpServer: HttpServer) {

@@ -1,6 +1,6 @@
 import type { ClientToServerEvents } from "@/common/types";
 import { addPlaylistEntryToRoomBySlug } from "@/database/room";
-import type { Context } from "./types";
+import type { Context } from "../types";
 
 export async function handlePlaylistImport(
   { io, socket }: Context,

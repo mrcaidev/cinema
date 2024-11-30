@@ -1,5 +1,5 @@
 import type { ClientToServerEvents } from "@/common/types";
-import type { Context } from "./types";
+import type { Context } from "../types";
 
 export async function handleMessageSend(
   { socket }: Context,
