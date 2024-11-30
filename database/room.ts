@@ -1,14 +1,9 @@
-import type {
-  PlaylistVideo,
-  Room,
-  RoomUser,
-  RoomWithCredentials,
-} from "@/common/types";
+import type { PlaylistVideo, Room, RoomUser } from "@/common/types";
 import { ObjectId, type WithId } from "mongodb";
 import { nanoid } from "nanoid";
 import { db } from "./db";
 
-type Doc = Omit<RoomWithCredentials, "id">;
+type Doc = Omit<Room, "id">;
 
 const collection = db.collection<Doc>("rooms");
 
@@ -22,20 +17,7 @@ export async function findRoomBySlug(slug: string) {
   return toRoom(doc);
 }
 
-export async function findRoomWithCredentialsBySlug(slug: string) {
-  const doc = await collection.findOne({ slug });
-
-  if (!doc || doc.deletedTime) {
-    return null;
-  }
-
-  return toRoomWithCredentials(doc);
-}
-
-type CreateRoomDto = Pick<
-  Doc,
-  "name" | "users" | "passwordSalt" | "passwordHash"
->;
+type CreateRoomDto = Pick<Doc, "name" | "users" | "password">;
 
 export async function createRoom(dto: CreateRoomDto) {
   const doc: Doc = {
@@ -135,14 +117,8 @@ export async function removePlaylistVideo(
   );
 }
 
-function toRoomWithCredentials(doc: WithId<Doc>): RoomWithCredentials {
-  const { _id, ...rest } = doc;
-
-  return { id: _id.toHexString(), ...rest };
-}
-
 function toRoom(doc: WithId<Doc>): Room {
-  const { _id, passwordSalt, passwordHash, ...rest } = doc;
+  const { _id, ...rest } = doc;
 
   return { id: _id.toHexString(), ...rest };
 }

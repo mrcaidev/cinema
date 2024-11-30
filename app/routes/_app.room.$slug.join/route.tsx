@@ -1,10 +1,6 @@
 import { loadMe } from "@/app/loaders/me";
-import { hash } from "@/app/utils/salt";
 import { commitVisitorSession, getVisitorSession } from "@/app/utils/session";
-import {
-  admitUserToRoomById,
-  findRoomWithCredentialsBySlug,
-} from "@/database/room";
+import { admitUserToRoomById, findRoomBySlug } from "@/database/room";
 import { data, redirect } from "react-router";
 import * as v from "valibot";
 import type { Route } from "./+types/route";
@@ -33,21 +29,19 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const { slug, password } = output;
 
   // Find the target room.
-  const roomWithCredentials = await findRoomWithCredentialsBySlug(slug);
+  const room = await findRoomBySlug(slug);
 
-  if (!roomWithCredentials) {
+  if (!room) {
     return data(
       { error: "Make sure you pasted the correct invitation link!" },
       { status: 403 },
     );
   }
 
-  const { id: roomId, users, passwordSalt, passwordHash } = roomWithCredentials;
-
   // If the user has logged in, and has already been admitted to the room.
   const me = await loadMe(request);
 
-  if (me && users.some((user) => user.id === me.id)) {
+  if (me && room.users.some((user) => user.id === me.id)) {
     return redirect(`/room/${slug}`) as never;
   }
 
@@ -56,14 +50,14 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 
   const visitorId = visitorSession.get("id");
 
-  if (!me && visitorId && users.some((user) => user.id === visitorId)) {
+  if (!me && visitorId && room.users.some((user) => user.id === visitorId)) {
     return redirect(`/room/${slug}`) as never;
   }
 
   // Now, these users, regardless of whether they have logged in or not,
   // have not been admitted to the room. If the room is protected by password,
   // make sure they pass the password check.
-  if (passwordSalt && passwordHash) {
+  if (room.password) {
     if (!password) {
       return data(
         {
@@ -73,9 +67,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       );
     }
 
-    const attemptHash = await hash(password, passwordSalt);
-
-    if (attemptHash !== passwordHash) {
+    if (password !== room.password) {
       return data(
         { error: "Make sure you pasted the correct invitation link!" },
         { status: 403 },
@@ -85,7 +77,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 
   // If the user has logged in, admit them to the room as member.
   if (me) {
-    await admitUserToRoomById(roomId, {
+    await admitUserToRoomById(room.id, {
       id: me.id,
       nickname: me.nickname,
       avatarUrl: me.avatarUrl,
@@ -98,7 +90,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   // If the user has not logged in, and is not a new visitor,
   // admit them to the room as visitor.
   if (visitorId) {
-    await admitUserToRoomById(roomId, {
+    await admitUserToRoomById(room.id, {
       id: visitorId,
       nickname: `Visitor ${visitorId}`,
       avatarUrl: null,
@@ -112,7 +104,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   // generate a new visitor ID and admit them to the room as visitor.
   const newVisitorId = crypto.randomUUID();
 
-  await admitUserToRoomById(roomId, {
+  await admitUserToRoomById(room.id, {
     id: newVisitorId,
     nickname: `Visitor ${newVisitorId.slice(0, 6)}`,
     avatarUrl: null,

@@ -38,15 +38,11 @@ export type Room = {
   id: string;
   slug: string;
   name: string;
+  password: string | null;
   users: RoomUser[];
   playlist: PlaylistVideo[];
   createdTime: number;
   deletedTime: number | null;
-};
-
-export type RoomWithCredentials = Room & {
-  passwordSalt: string | null;
-  passwordHash: string | null;
 };
 
 type UserJoinedEvent = {

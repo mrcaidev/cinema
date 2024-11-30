@@ -11,7 +11,6 @@ import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { useToast } from "@/app/components/ui/use-toast";
 import { loadMe } from "@/app/loaders/me";
-import { generateSalt, hash } from "@/app/utils/salt";
 import { createRoom } from "@/database/room";
 import { ChevronLeftIcon, Loader2Icon, PlusIcon } from "lucide-react";
 import { useEffect } from "react";
@@ -50,16 +49,9 @@ export async function action({ request }: Route.ActionArgs) {
 
   const me = await loadMe(request, { strict: true });
 
-  let passwordSalt: string | null = null;
-  let passwordHash: string | null = null;
-
-  if (password) {
-    passwordSalt = generateSalt();
-    passwordHash = await hash(password, passwordSalt);
-  }
-
   const room = await createRoom({
     name,
+    password,
     users: [
       {
         id: me.id,
@@ -68,8 +60,6 @@ export async function action({ request }: Route.ActionArgs) {
         role: "host",
       },
     ],
-    passwordSalt,
-    passwordHash,
   });
 
   return redirect(`/room/${room.slug}`) as never;
