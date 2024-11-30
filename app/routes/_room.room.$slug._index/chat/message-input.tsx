@@ -9,27 +9,28 @@ import {
 import { useLoaderData } from "react-router";
 import type { loader } from "../route";
 import { useSocket } from "../socket-context";
-import type { ChatEntry } from "./chat";
+import type { ChatEvent } from "./types";
 
 type Props = {
-  setEntries: Dispatch<SetStateAction<ChatEntry[]>>;
+  setEvents: Dispatch<SetStateAction<ChatEvent[]>>;
 };
 
-export function MessageInput({ setEntries }: Props) {
-  const { me } = useLoaderData<typeof loader>();
+export function MessageInput({ setEvents }: Props) {
+  const { me, role } = useLoaderData<typeof loader>();
 
   const socket = useSocket();
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const sendMessage = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
     if (!socket) {
       return;
     }
 
-    const content = new FormData(e.currentTarget).get("content")?.toString();
+    const formData = new FormData(event.currentTarget);
+    const content = formData.get("content")?.toString();
 
     if (!content) {
       return;
@@ -38,12 +39,17 @@ export function MessageInput({ setEntries }: Props) {
     const id = crypto.randomUUID();
     const sentTime = Date.now();
 
-    setEntries((entries) => [
-      ...entries,
+    setEvents((events) => [
+      ...events,
       {
-        type: "message" as const,
+        type: "chat" as const,
         id,
-        fromUser: me,
+        fromUser: {
+          id: me.id,
+          nickname: me.nickname,
+          avatarUrl: me.avatarUrl,
+          role,
+        },
         content,
         sentTime,
         isWaitingForAck: true,
@@ -54,26 +60,27 @@ export function MessageInput({ setEntries }: Props) {
 
     await socket.emitWithAck("message:send", { id, content, sentTime });
 
-    setEntries((entries) => {
-      const index = entries.findIndex((entry) => entry.id === id);
+    setEvents((events) => {
+      const index = events.findIndex((event) => event.id === id);
 
       if (index === -1) {
-        return entries;
+        return events;
       }
 
-      return [
-        ...entries.slice(0, index),
-        // biome-ignore lint/style/noNonNullAssertion: Must exist.
-        { ...entries[index]!, isWaitingForAck: false },
-        ...entries.slice(index + 1),
-      ];
+      const event = events[index];
+
+      if (!event || event.type !== "chat") {
+        return events;
+      }
+
+      return events.toSpliced(index, 1, { ...event, isWaitingForAck: false });
     });
   };
 
   return (
     <div className="flex items-center gap-2">
       <UserAvatar user={me} />
-      <form ref={formRef} onSubmit={handleSubmit} className="grow">
+      <form ref={formRef} onSubmit={sendMessage} className="grow">
         <label htmlFor="content" className="sr-only">
           Message
         </label>

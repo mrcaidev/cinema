@@ -2,27 +2,26 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { MessageSquareIcon } from "lucide-react";
 import { useState } from "react";
 import { useSocketEvent } from "../socket-context";
-import { Join, type JoinEntry } from "./join";
-import { Leave, type LeaveEntry } from "./leave";
-import { Message, type MessageEntry } from "./message";
+import { Join } from "./join";
+import { Leave } from "./leave";
+import { Message } from "./message";
 import { MessageInput } from "./message-input";
 import { Ping } from "./ping";
-
-export type ChatEntry = JoinEntry | LeaveEntry | MessageEntry;
+import type { ChatEvent } from "./types";
 
 export function Chat() {
-  const [entries, setEntries] = useState<ChatEntry[]>([]);
+  const [events, setEvents] = useState<ChatEvent[]>([]);
 
   useSocketEvent("user:joined", (_, event) => {
-    setEntries((entries) => [...entries, { type: "join", ...event }]);
+    setEvents((events) => [...events, { type: "join", ...event }]);
   });
 
   useSocketEvent("user:left", (_, event) => {
-    setEntries((entries) => [...entries, { type: "leave", ...event }]);
+    setEvents((events) => [...events, { type: "leave", ...event }]);
   });
 
   useSocketEvent("message:sent", (_, event) => {
-    setEntries((entries) => [...entries, { type: "message", ...event }]);
+    setEvents((events) => [...events, { type: "chat", ...event }]);
   });
 
   const [listRef] = useAutoAnimate();
@@ -41,24 +40,24 @@ export function Chat() {
         ref={listRef}
         className="h-[calc(100%-108px)] px-4 overflow-auto scrollbar-thin scroll-thumb-rounded scrollbar-thumb-muted"
       >
-        {entries.map((chatEntry) =>
-          chatEntry.type === "join" ? (
-            <li key={chatEntry.id} className="my-1 first:mt-3">
-              <Join entry={chatEntry} />
+        {events.map((event) =>
+          event.type === "join" ? (
+            <li key={event.id} className="my-1 first:mt-3">
+              <Join join={event} />
             </li>
-          ) : chatEntry.type === "leave" ? (
-            <li key={chatEntry.id} className="my-1 first:mt-3">
-              <Leave entry={chatEntry} />
+          ) : event.type === "leave" ? (
+            <li key={event.id} className="my-1 first:mt-3">
+              <Leave leave={event} />
             </li>
           ) : (
-            <li key={chatEntry.id} className="my-3">
-              <Message entry={chatEntry} />
+            <li key={event.id} className="my-3">
+              <Message message={event} />
             </li>
           ),
         )}
       </ol>
       <div className="px-4 pt-2 pb-3">
-        <MessageInput setEntries={setEntries} />
+        <MessageInput setEvents={setEvents} />
       </div>
     </section>
   );

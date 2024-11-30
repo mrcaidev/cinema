@@ -1,20 +1,13 @@
-import type { RoomUser } from "@/common/types";
-
-export type LeaveEntry = {
-  type: "leave";
-  id: string;
-  user: RoomUser;
-  leftTime: number;
-};
+import type { LeaveEvent } from "./types";
 
 type Props = {
-  entry: LeaveEntry;
+  leave: LeaveEvent;
 };
 
-export function Leave({ entry }: Props) {
+export function Leave({ leave }: Props) {
   return (
     <div className="text-muted-foreground text-sm text-center">
-      {entry.user.nickname} leaves the room
+      {leave.user.nickname} leaves the room
     </div>
   );
 }

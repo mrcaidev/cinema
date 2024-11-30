@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { useSocket } from "../socket-context";
 
 export function Ping() {
-  const socket = useSocket();
-
   const [latency, setLatency] = useState(0);
+
+  const socket = useSocket();
 
   useEffect(() => {
     if (!socket) {

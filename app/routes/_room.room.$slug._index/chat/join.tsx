@@ -1,20 +1,13 @@
-import type { RoomUser } from "@/common/types";
-
-export type JoinEntry = {
-  type: "join";
-  id: string;
-  user: RoomUser;
-  joinedTime: number;
-};
+import type { JoinEvent } from "./types";
 
 type Props = {
-  entry: JoinEntry;
+  join: JoinEvent;
 };
 
-export function Join({ entry }: Props) {
+export function Join({ join }: Props) {
   return (
     <div className="text-muted-foreground text-sm text-center">
-      {entry.user.nickname} joins the room
+      {join.user.nickname} joins the room
     </div>
   );
 }
