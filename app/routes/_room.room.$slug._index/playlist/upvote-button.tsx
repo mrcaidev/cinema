@@ -23,12 +23,7 @@ export function UpvoteButton({ id, upvotedUserIds }: Props) {
       return;
     }
 
-    socket.emit("playlist:upvote", {
-      id,
-      upvotedUserIds: isUpvoted
-        ? upvotedUserIds.toSpliced(upvotedIndex, 1)
-        : [...upvotedUserIds, me.id],
-    });
+    socket.emit("playlist:upvote", { id });
   };
 
   return (

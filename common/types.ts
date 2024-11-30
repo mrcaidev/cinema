@@ -86,10 +86,11 @@ type PlaylistImportedEvent = PlaylistImportEvent & {
 
 type PlaylistUpvoteEvent = {
   id: string;
-  upvotedUserIds: string[];
 };
 
-type PlaylistUpvotedEvent = PlaylistUpvoteEvent;
+type PlaylistUpvotedEvent = PlaylistUpvoteEvent & {
+  upvotedUserIds: string[];
+};
 
 export type ClientToServerEvents = {
   ping: (callback: () => void) => void;

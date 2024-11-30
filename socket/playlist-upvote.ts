@@ -1,5 +1,5 @@
 import type { ClientToServerEvents } from "@/common/types";
-import { updateUpvotedUserIdsInRoomBySlug } from "@/database/room";
+import { upvotePlaylistEntry } from "@/database/room";
 import type { Context } from "./types";
 
 export async function handlePlaylistUpvote(
@@ -12,7 +12,17 @@ export async function handlePlaylistUpvote(
     return;
   }
 
-  await updateUpvotedUserIdsInRoomBySlug(socket.data.room, event);
+  const newUpvotedUserIds = await upvotePlaylistEntry(socket.data.room, {
+    playlistEntryId: event.id,
+    user: socket.data.user,
+  });
 
-  io.to(socket.data.room).emit("playlist:upvoted", event);
+  if (!newUpvotedUserIds) {
+    return;
+  }
+
+  io.to(socket.data.room).emit("playlist:upvoted", {
+    ...event,
+    upvotedUserIds: newUpvotedUserIds,
+  });
 }

@@ -78,19 +78,52 @@ export async function addPlaylistEntryToRoomBySlug(
   return entry;
 }
 
-type UpdateUpvotedUserIdsInRoomBySlugDto = {
-  id: string;
-  upvotedUserIds: string[];
+type UpvotePlaylistEntryDto = {
+  playlistEntryId: string;
+  user: RoomUser;
 };
 
-export async function updateUpvotedUserIdsInRoomBySlug(
-  slug: string,
-  dto: UpdateUpvotedUserIdsInRoomBySlugDto,
+export async function upvotePlaylistEntry(
+  roomSlug: string,
+  dto: UpvotePlaylistEntryDto,
 ) {
-  await collection.updateOne(
-    { slug, "playlist.id": dto.id },
-    { $set: { "playlist.$.upvotedUserIds": dto.upvotedUserIds } },
+  const room = await collection.findOne({ slug: roomSlug });
+
+  if (!room) {
+    return;
+  }
+
+  const playlistEntryIndex = room.playlist.findIndex(
+    (entry) => entry.id === dto.playlistEntryId,
   );
+
+  if (playlistEntryIndex === -1) {
+    return;
+  }
+
+  const playlistEntry = room.playlist[playlistEntryIndex];
+
+  if (!playlistEntry) {
+    return;
+  }
+
+  const upvotedUserIdIndex = playlistEntry.upvotedUserIds.indexOf(dto.user.id);
+
+  const newUpvotedUserIds =
+    upvotedUserIdIndex === -1
+      ? [...playlistEntry.upvotedUserIds, dto.user.id]
+      : playlistEntry.upvotedUserIds.toSpliced(upvotedUserIdIndex, 1);
+
+  await collection.updateOne(
+    { slug: roomSlug },
+    {
+      $set: {
+        [`playlist.${playlistEntryIndex}.upvotedUserIds`]: newUpvotedUserIds,
+      },
+    },
+  );
+
+  return newUpvotedUserIds;
 }
 
 function toRoomWithCredentials(doc: WithId<Doc>): RoomWithCredentials {
