@@ -60,11 +60,14 @@ export async function action({ request }: Route.ActionArgs) {
 
   const room = await createRoom({
     name,
-    host: {
-      id: me.id,
-      nickname: me.nickname,
-      avatarUrl: me.avatarUrl,
-    },
+    users: [
+      {
+        id: me.id,
+        nickname: me.nickname,
+        avatarUrl: me.avatarUrl,
+        role: "host",
+      },
+    ],
     passwordSalt,
     passwordHash,
   });

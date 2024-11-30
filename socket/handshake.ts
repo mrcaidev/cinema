@@ -1,9 +1,3 @@
-import {
-  findAdminById,
-  findHostById,
-  findMemberById,
-  findVisitorById,
-} from "@/common/utils";
 import { findRoomBySlug } from "@/database/room";
 import * as v from "valibot";
 import type { Context } from "./types";
@@ -40,34 +34,14 @@ export async function handleHandshake({ socket }: Context) {
     return;
   }
 
-  const host = findHostById(room, userId);
-  if (host) {
-    socket.join(roomSlug);
-    socket.data = { room: roomSlug, user: { ...host, role: "host" } };
+  const user = room.users.find((user) => user.id === userId);
+
+  if (!user) {
+    socket.disconnect();
     return;
   }
 
-  const admin = findAdminById(room, userId);
-  if (admin) {
-    socket.join(roomSlug);
-    socket.data = { room: roomSlug, user: { ...admin, role: "admin" } };
-    return;
-  }
+  socket.join(roomSlug);
 
-  const member = findMemberById(room, userId);
-  if (member) {
-    socket.join(roomSlug);
-    socket.data = { room: roomSlug, user: { ...member, role: "member" } };
-    return;
-  }
-
-  const visitor = findVisitorById(room, userId);
-  if (visitor) {
-    socket.join(roomSlug);
-    socket.data = { room: roomSlug, user: { ...visitor, role: "visitor" } };
-    return;
-  }
-
-  socket.disconnect();
-  return;
+  socket.data = { room: roomSlug, user };
 }

@@ -2,7 +2,6 @@ import { Badge } from "@/app/components/ui/badge";
 import { cn } from "@/app/components/ui/cn";
 import { UserAvatar } from "@/app/components/user-avatar";
 import type { RoomUser } from "@/common/types";
-import { findAdminById, findHostById } from "@/common/utils";
 import { useLoaderData } from "react-router";
 import type { loader } from "../route";
 
@@ -20,7 +19,7 @@ type Props = {
 };
 
 export function Message({ entry }: Props) {
-  const { room, me } = useLoaderData<typeof loader>();
+  const { me } = useLoaderData<typeof loader>();
 
   return (
     <div
@@ -43,12 +42,12 @@ export function Message({ entry }: Props) {
             entry.fromUser.id === me.id && "flex-row-reverse",
           )}
         >
-          {findHostById(room, entry.fromUser.id) && (
+          {entry.fromUser.role === "host" && (
             <Badge className="px-2 rounded bg-yellow-600/80 pointer-events-none">
               HOST
             </Badge>
           )}
-          {findAdminById(room, entry.fromUser.id) && (
+          {entry.fromUser.role === "admin" && (
             <Badge className="px-2 rounded bg-green-600/80 pointer-events-none">
               ADMIN
             </Badge>

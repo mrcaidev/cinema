@@ -20,7 +20,9 @@ export type EmailVerification = {
   verifiedTime: number | null;
 };
 
-export type RoomUser = Pick<User, "id" | "nickname" | "avatarUrl">;
+export type RoomUser = Pick<User, "id" | "nickname" | "avatarUrl"> & {
+  role: "host" | "admin" | "member" | "visitor";
+};
 
 export type PlaylistEntry = {
   id: string;
@@ -36,10 +38,7 @@ export type Room = {
   id: string;
   slug: string;
   name: string;
-  host: RoomUser;
-  admins: RoomUser[];
-  members: RoomUser[];
-  visitors: RoomUser[];
+  users: RoomUser[];
   playlist: PlaylistEntry[];
   createdTime: number;
   deletedTime: number | null;

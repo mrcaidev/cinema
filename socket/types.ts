@@ -7,7 +7,7 @@ import type { DefaultEventsMap, Server, Socket } from "socket.io";
 
 export type SocketData = {
   room: string;
-  user: RoomUser & { role: "host" | "admin" | "member" | "visitor" };
+  user: RoomUser;
 };
 
 export type IO = Server<

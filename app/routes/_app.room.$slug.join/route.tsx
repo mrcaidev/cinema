@@ -2,8 +2,7 @@ import { loadMe } from "@/app/loaders/me";
 import { hash } from "@/app/utils/salt";
 import { commitVisitorSession, getVisitorSession } from "@/app/utils/session";
 import {
-  admitMemberToRoomById,
-  admitVisitorToRoomById,
+  admitUserToRoomById,
   findRoomWithCredentialsBySlug,
 } from "@/database/room";
 import { nanoid } from "nanoid";
@@ -44,20 +43,12 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     );
   }
 
-  const {
-    id: roomId,
-    host,
-    admins,
-    members,
-    visitors,
-    passwordSalt,
-    passwordHash,
-  } = roomWithCredentials;
+  const { id: roomId, users, passwordSalt, passwordHash } = roomWithCredentials;
 
   // If the user has logged in, and has already been admitted to the room.
   const me = await loadMe(request);
 
-  if (me && [host, ...admins, ...members].some((u) => u.id === me.id)) {
+  if (me && users.some((user) => user.id === me.id)) {
     return redirect(`/room/${slug}`) as never;
   }
 
@@ -66,7 +57,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 
   const visitorId = visitorSession.get("id");
 
-  if (!me && visitorId && visitors.some((v) => v.id === visitorId)) {
+  if (!me && visitorId && users.some((user) => user.id === visitorId)) {
     return redirect(`/room/${slug}`) as never;
   }
 
@@ -95,10 +86,11 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 
   // If the user has logged in, admit them to the room as member.
   if (me) {
-    await admitMemberToRoomById(roomId, {
+    await admitUserToRoomById(roomId, {
       id: me.id,
       nickname: me.nickname,
       avatarUrl: me.avatarUrl,
+      role: "member",
     });
 
     return redirect(`/room/${slug}`) as never;
@@ -107,18 +99,28 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   // If the user has not logged in, and is not a new visitor,
   // admit them to the room as visitor.
   if (visitorId) {
-    await admitVisitorToRoomById(roomId, visitorId);
+    await admitUserToRoomById(roomId, {
+      id: visitorId,
+      nickname: `Visitor ${visitorId}`,
+      avatarUrl: null,
+      role: "visitor",
+    });
 
     return redirect(`/room/${slug}`) as never;
   }
 
   // If the user has not logged in, and is a new visitor,
   // generate a new visitor ID and admit them to the room as visitor.
-  const newVistorId = nanoid(10);
+  const newVisitorId = nanoid(10);
 
-  await admitVisitorToRoomById(roomId, newVistorId);
+  await admitUserToRoomById(roomId, {
+    id: newVisitorId,
+    nickname: `Visitor ${newVisitorId}`,
+    avatarUrl: null,
+    role: "visitor",
+  });
 
-  visitorSession.set("id", newVistorId);
+  visitorSession.set("id", newVisitorId);
 
   const visitorCookie = await commitVisitorSession(visitorSession);
 

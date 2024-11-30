@@ -34,16 +34,13 @@ export async function findRoomWithCredentialsBySlug(slug: string) {
 
 type CreateRoomDto = Pick<
   Doc,
-  "name" | "host" | "passwordSalt" | "passwordHash"
+  "name" | "users" | "passwordSalt" | "passwordHash"
 >;
 
 export async function createRoom(dto: CreateRoomDto) {
   const doc: Doc = {
     ...dto,
     slug: nanoid(10),
-    admins: [],
-    members: [],
-    visitors: [],
     playlist: [],
     createdTime: Date.now(),
     deletedTime: null,
@@ -54,23 +51,10 @@ export async function createRoom(dto: CreateRoomDto) {
   return toRoom({ _id: insertedId, ...doc });
 }
 
-export async function admitMemberToRoomById(id: string, member: RoomUser) {
+export async function admitUserToRoomById(id: string, user: RoomUser) {
   await collection.updateOne(
     { _id: new ObjectId(id) },
-    { $push: { members: member } },
-  );
-}
-
-export async function admitVisitorToRoomById(id: string, visitorId: string) {
-  const visitor: RoomUser = {
-    id: visitorId,
-    nickname: `Visitor ${visitorId}`,
-    avatarUrl: null,
-  };
-
-  await collection.updateOne(
-    { _id: new ObjectId(id) },
-    { $push: { visitors: visitor } },
+    { $push: { users: user } },
   );
 }
 

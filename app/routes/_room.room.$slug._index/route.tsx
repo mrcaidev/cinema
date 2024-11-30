@@ -1,11 +1,5 @@
 import { loadMe } from "@/app/loaders/me";
 import { getVisitorSession } from "@/app/utils/session";
-import {
-  findAdminById,
-  findHostById,
-  findMemberById,
-  findVisitorById,
-} from "@/common/utils";
 import { findRoomBySlug } from "@/database/room";
 import { redirect } from "react-router";
 import * as v from "valibot";
@@ -38,19 +32,13 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const me = await loadMe(request);
 
   if (me) {
-    if (findHostById(room, me.id)) {
-      return { room, me, role: "host" as const };
+    const user = room.users.find((user) => user.id === me.id);
+
+    if (!user) {
+      return redirect(`/room/${slug}/join`) as never;
     }
 
-    if (findAdminById(room, me.id)) {
-      return { room, me, role: "admin" as const };
-    }
-
-    if (findMemberById(room, me.id)) {
-      return { room, me, role: "member" as const };
-    }
-
-    return redirect(`/room/${slug}/join`) as never;
+    return { room, me: user, role: user.role };
   }
 
   const visitorSession = await getVisitorSession(request.headers.get("Cookie"));
@@ -61,7 +49,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     return redirect(`/room/${slug}/join`) as never;
   }
 
-  const visitor = findVisitorById(room, visitorId);
+  const visitor = room.users.find((user) => user.id === visitorId);
 
   if (visitor) {
     return { room, me: visitor, role: "visitor" as const };
