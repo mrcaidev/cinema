@@ -96,7 +96,7 @@ export function ImportVideoButton() {
             <DrawerTitle>Import a Video</DrawerTitle>
             <DrawerDescription>Paste the URL of the video.</DrawerDescription>
           </DrawerHeader>
-          <form className="space-y-4 px-4">
+          <form className="px-4">
             <div className="space-y-1">
               <Label htmlFor="videoUrl" required>
                 Video URL
@@ -132,9 +132,11 @@ export function ImportVideoButton() {
                 src={parserOutput.thumbnailUrl}
                 alt="Thumbnail of the video to be imported"
                 width={352}
-                className="w-[352px] aspect-video bg-muted object-cover"
+                className="aspect-video bg-muted object-cover"
               />
-              <p className="px-3 py-2 font-medium">{parserOutput.title}</p>
+              <p className="px-3 py-2 text-sm font-medium">
+                {parserOutput.title}
+              </p>
             </div>
           )}
           <DrawerFooter>

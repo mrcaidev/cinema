@@ -24,7 +24,7 @@ export type RoomUser = Pick<User, "id" | "nickname" | "avatarUrl"> & {
   role: "host" | "admin" | "member" | "visitor";
 };
 
-export type PlaylistEntry = {
+export type PlaylistVideo = {
   id: string;
   url: string;
   provider: string;
@@ -39,7 +39,7 @@ export type Room = {
   slug: string;
   name: string;
   users: RoomUser[];
-  playlist: PlaylistEntry[];
+  playlist: PlaylistVideo[];
   createdTime: number;
   deletedTime: number | null;
 };

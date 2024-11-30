@@ -6,9 +6,10 @@ type Props = {
   id: string;
 };
 
-export function RemoveButton({ id }: Props) {
+export function RemoveVideoButton({ id }: Props) {
   const socket = useSocket();
-  const remove = (event: Event) => {
+
+  const removeVideo = (event: Event) => {
     event.preventDefault();
 
     if (!socket) {
@@ -20,7 +21,7 @@ export function RemoveButton({ id }: Props) {
 
   return (
     <DropdownMenuItem
-      onSelect={remove}
+      onSelect={removeVideo}
       className="!text-destructive cursor-pointer"
     >
       <ListXIcon />

@@ -1,5 +1,5 @@
 import type {
-  PlaylistEntry,
+  PlaylistVideo,
   Room,
   RoomUser,
   RoomWithCredentials,
@@ -58,34 +58,33 @@ export async function admitUserToRoomById(id: string, user: RoomUser) {
   );
 }
 
-type AddPlaylistEntryToRoomBySlugDto = Pick<
-  PlaylistEntry,
+type AddPlaylistVideoDto = Pick<
+  PlaylistVideo,
   "url" | "provider" | "title" | "html" | "fromUser"
 >;
 
-export async function addPlaylistEntryToRoomBySlug(
-  slug: string,
-  dto: AddPlaylistEntryToRoomBySlugDto,
+export async function addPlaylistVideo(
+  roomSlug: string,
+  dto: AddPlaylistVideoDto,
 ) {
-  const entry: PlaylistEntry = {
+  const video: PlaylistVideo = {
     ...dto,
     id: crypto.randomUUID(),
     upvotedUserIds: [],
   };
 
-  await collection.updateOne({ slug }, { $push: { playlist: entry } });
+  await collection.updateOne(
+    { slug: roomSlug },
+    { $push: { playlist: video } },
+  );
 
-  return entry;
+  return video;
 }
 
-type UpvotePlaylistEntryDto = {
-  playlistEntryId: string;
-  user: RoomUser;
-};
-
-export async function upvotePlaylistEntry(
+export async function upvotePlaylistVideo(
   roomSlug: string,
-  dto: UpvotePlaylistEntryDto,
+  playlistVideoId: string,
+  user: RoomUser,
 ) {
   const room = await collection.findOne({ slug: roomSlug });
 
@@ -93,32 +92,32 @@ export async function upvotePlaylistEntry(
     return;
   }
 
-  const playlistEntryIndex = room.playlist.findIndex(
-    (entry) => entry.id === dto.playlistEntryId,
+  const playlistVideoIndex = room.playlist.findIndex(
+    (video) => video.id === playlistVideoId,
   );
 
-  if (playlistEntryIndex === -1) {
+  if (playlistVideoIndex === -1) {
     return;
   }
 
-  const playlistEntry = room.playlist[playlistEntryIndex];
+  const playlistVideo = room.playlist[playlistVideoIndex];
 
-  if (!playlistEntry) {
+  if (!playlistVideo) {
     return;
   }
 
-  const upvotedUserIdIndex = playlistEntry.upvotedUserIds.indexOf(dto.user.id);
+  const upvotedUserIdIndex = playlistVideo.upvotedUserIds.indexOf(user.id);
 
   const newUpvotedUserIds =
     upvotedUserIdIndex === -1
-      ? [...playlistEntry.upvotedUserIds, dto.user.id]
-      : playlistEntry.upvotedUserIds.toSpliced(upvotedUserIdIndex, 1);
+      ? [...playlistVideo.upvotedUserIds, user.id]
+      : playlistVideo.upvotedUserIds.toSpliced(upvotedUserIdIndex, 1);
 
   await collection.updateOne(
     { slug: roomSlug },
     {
       $set: {
-        [`playlist.${playlistEntryIndex}.upvotedUserIds`]: newUpvotedUserIds,
+        [`playlist.${playlistVideoIndex}.upvotedUserIds`]: newUpvotedUserIds,
       },
     },
   );
@@ -126,13 +125,13 @@ export async function upvotePlaylistEntry(
   return newUpvotedUserIds;
 }
 
-export async function removePlaylistEntry(
+export async function removePlaylistVideo(
   roomSlug: string,
-  playlistEntryId: string,
+  playlistVideoId: string,
 ) {
   await collection.updateOne(
     { slug: roomSlug },
-    { $pull: { playlist: { id: playlistEntryId } } },
+    { $pull: { playlist: { id: playlistVideoId } } },
   );
 }
 

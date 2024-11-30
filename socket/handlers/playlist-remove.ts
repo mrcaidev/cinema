@@ -1,5 +1,5 @@
 import type { ClientToServerEvents } from "@/common/types";
-import { removePlaylistEntry } from "@/database/room";
+import { removePlaylistVideo } from "@/database/room";
 import type { Context } from "../types";
 
 export async function handlePlaylistRemove(
@@ -12,7 +12,7 @@ export async function handlePlaylistRemove(
     return;
   }
 
-  await removePlaylistEntry(socket.data.room, event.id);
+  await removePlaylistVideo(socket.data.room, event.id);
 
   io.to(socket.data.room).emit("playlist:removed", event);
 }

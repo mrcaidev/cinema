@@ -3,9 +3,9 @@ import { ListVideo } from "lucide-react";
 import { useMemo } from "react";
 import { usePlaylist } from "../playlist-context";
 import { useSocketEvent } from "../socket-context";
-import { CurrentItem } from "./current-item";
+import { CandidateVideo } from "./candidate-video";
+import { CurrentVideo } from "./current-video";
 import { ImportVideoButton } from "./import-video-button";
-import { PlaylistItem } from "./playlist-item";
 
 export function Playlist() {
   const { playlist, setPlaylist } = usePlaylist();
@@ -20,32 +20,32 @@ export function Playlist() {
   const [playlistRef] = useAutoAnimate();
 
   useSocketEvent("playlist:imported", (_, event) => {
-    setPlaylist((entries) => [...entries, event]);
+    setPlaylist((videos) => [...videos, event]);
   });
 
   useSocketEvent("playlist:upvoted", (_, event) => {
     const { id, upvotedUserIds } = event;
-    setPlaylist((entries) => {
-      const index = entries.findIndex((entry) => entry.id === id);
+    setPlaylist((videos) => {
+      const index = videos.findIndex((video) => video.id === id);
       if (index === -1) {
-        return entries;
+        return videos;
       }
-      return entries.toSpliced(index, 1, {
-        // biome-ignore lint/style/noNonNullAssertion: Must exist.
-        ...entries[index]!,
-        upvotedUserIds,
-      });
+      const video = videos[index];
+      if (!video) {
+        return videos;
+      }
+      return videos.toSpliced(index, 1, { ...video, upvotedUserIds });
     });
   });
 
   useSocketEvent("playlist:removed", (_, event) => {
     const { id } = event;
-    setPlaylist((entries) => {
-      const index = entries.findIndex((entry) => entry.id === id);
+    setPlaylist((videos) => {
+      const index = videos.findIndex((video) => video.id === id);
       if (index === -1) {
-        return entries;
+        return videos;
       }
-      return entries.toSpliced(index, 1);
+      return videos.toSpliced(index, 1);
     });
   });
 
@@ -65,16 +65,16 @@ export function Playlist() {
       >
         {playlist[0] ? (
           <li className="mt-2">
-            <CurrentItem entry={playlist[0]} />
+            <CurrentVideo video={playlist[0]} />
           </li>
         ) : (
           <div className="grid place-items-center h-full text-muted-foreground text-sm">
             No video yet :)
           </div>
         )}
-        {prioritizedCandidates.map((entry, index) => (
-          <li key={entry.id} className="last:mb-2">
-            <PlaylistItem entry={entry} index={index + 1} />
+        {prioritizedCandidates.map((video, index) => (
+          <li key={video.id} className="last:mb-2">
+            <CandidateVideo video={video} index={index + 1} />
           </li>
         ))}
       </ol>

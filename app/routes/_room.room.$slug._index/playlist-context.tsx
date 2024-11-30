@@ -1,4 +1,4 @@
-import type { PlaylistEntry } from "@/common/types";
+import type { PlaylistVideo } from "@/common/types";
 import {
   createContext,
   useContext,
@@ -11,8 +11,8 @@ import { useLoaderData } from "react-router";
 import type { loader } from "./route";
 
 type State = {
-  playlist: PlaylistEntry[];
-  setPlaylist: Dispatch<SetStateAction<PlaylistEntry[]>>;
+  playlist: PlaylistVideo[];
+  setPlaylist: Dispatch<SetStateAction<PlaylistVideo[]>>;
 };
 
 const DEFAULT_STATE: State = {

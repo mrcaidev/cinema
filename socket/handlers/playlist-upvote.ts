@@ -1,5 +1,5 @@
 import type { ClientToServerEvents } from "@/common/types";
-import { upvotePlaylistEntry } from "@/database/room";
+import { upvotePlaylistVideo } from "@/database/room";
 import type { Context } from "../types";
 
 export async function handlePlaylistUpvote(
@@ -12,10 +12,11 @@ export async function handlePlaylistUpvote(
     return;
   }
 
-  const newUpvotedUserIds = await upvotePlaylistEntry(socket.data.room, {
-    playlistEntryId: event.id,
-    user: socket.data.user,
-  });
+  const newUpvotedUserIds = await upvotePlaylistVideo(
+    socket.data.room,
+    event.id,
+    socket.data.user,
+  );
 
   if (!newUpvotedUserIds) {
     return;

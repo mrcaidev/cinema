@@ -53,9 +53,7 @@ const parseBilibiliBvUrl: Parser = async (input) => {
     return;
   }
 
-  const matchResult = url.pathname.match(
-    /^\/video\/(BV[a-zA-Z0-9]{10}?)(\/)?$/,
-  );
+  const matchResult = url.pathname.match(/^\/video\/(BV[a-zA-Z0-9]{10})(\/)?$/);
 
   if (!matchResult) {
     return;
@@ -104,7 +102,7 @@ function createConcurrentParser(...parsers: Parser[]) {
       }),
     );
 
-    return outputs.find((o) => !!o) ?? DEFAULT_PARSER_OUTPUT;
+    return outputs.find((output) => !!output) ?? DEFAULT_PARSER_OUTPUT;
   };
 }
 

@@ -1,5 +1,5 @@
 import type { ClientToServerEvents } from "@/common/types";
-import { addPlaylistEntryToRoomBySlug } from "@/database/room";
+import { addPlaylistVideo } from "@/database/room";
 import type { Context } from "../types";
 
 export async function handlePlaylistImport(
@@ -12,12 +12,12 @@ export async function handlePlaylistImport(
     return;
   }
 
-  const entry = await addPlaylistEntryToRoomBySlug(socket.data.room, {
+  const video = await addPlaylistVideo(socket.data.room, {
     ...event,
     fromUser: socket.data.user,
   });
 
-  io.to(socket.data.room).emit("playlist:imported", entry);
+  io.to(socket.data.room).emit("playlist:imported", video);
 
   callback();
 }

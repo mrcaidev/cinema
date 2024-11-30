@@ -9,14 +9,14 @@ type Props = {
   upvotedUserIds: string[];
 };
 
-export function UpvoteButton({ id, upvotedUserIds }: Props) {
+export function UpvoteVideoButton({ id, upvotedUserIds }: Props) {
   const { me } = useLoaderData<typeof loader>();
 
-  const upvotedIndex = upvotedUserIds.findIndex((id) => id === me.id);
-  const isUpvoted = upvotedIndex !== -1;
+  const isUpvoted = upvotedUserIds.some((userId) => userId === me.id);
 
   const socket = useSocket();
-  const upvote = (event: Event) => {
+
+  const upvoteVideo = (event: Event) => {
     event.preventDefault();
 
     if (!socket) {
@@ -27,7 +27,7 @@ export function UpvoteButton({ id, upvotedUserIds }: Props) {
   };
 
   return (
-    <DropdownMenuItem onSelect={upvote} className="cursor-pointer">
+    <DropdownMenuItem onSelect={upvoteVideo} className="cursor-pointer">
       <ArrowBigUpIcon fill={isUpvoted ? "currentColor" : undefined} />
       {isUpvoted ? "Upvoted" : "Upvote"}
       <span className="text-muted-foreground">({upvotedUserIds.length})</span>
