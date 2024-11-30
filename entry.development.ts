@@ -13,7 +13,7 @@ const httpServer = createHttpServer(expressServer);
 createSocketServer(httpServer);
 
 const viteServer = await createViteServer({ server: { middlewareMode: true } });
-const { appServer } = await viteServer.ssrLoadModule("./app/server.ts");
+const { appServer } = await viteServer.ssrLoadModule("./app/server");
 
 expressServer.disable("x-powered-by");
 expressServer.use(compression());
