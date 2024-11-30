@@ -5,7 +5,6 @@ import {
   admitUserToRoomById,
   findRoomWithCredentialsBySlug,
 } from "@/database/room";
-import { nanoid } from "nanoid";
 import { data, redirect } from "react-router";
 import * as v from "valibot";
 import type { Route } from "./+types/route";
@@ -111,11 +110,11 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 
   // If the user has not logged in, and is a new visitor,
   // generate a new visitor ID and admit them to the room as visitor.
-  const newVisitorId = nanoid(10);
+  const newVisitorId = crypto.randomUUID();
 
   await admitUserToRoomById(roomId, {
     id: newVisitorId,
-    nickname: `Visitor ${newVisitorId}`,
+    nickname: `Visitor ${newVisitorId.slice(0, 6)}`,
     avatarUrl: null,
     role: "visitor",
   });

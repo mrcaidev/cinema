@@ -10,7 +10,7 @@ const schema = v.object({
   auth: v.object({
     userId: v.union([
       v.pipe(v.string(), v.regex(/^[a-fA-F0-9]{24}$/)),
-      v.pipe(v.string(), v.nanoid(), v.length(10)),
+      v.pipe(v.string(), v.uuid()),
     ]),
   }),
 });

@@ -69,7 +69,7 @@ export async function addPlaylistEntryToRoomBySlug(
 ) {
   const entry: PlaylistEntry = {
     ...dto,
-    id: nanoid(),
+    id: crypto.randomUUID(),
     upvotedUserIds: [],
   };
 

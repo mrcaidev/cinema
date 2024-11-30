@@ -1,6 +1,5 @@
 import { Input } from "@/app/components/ui/input";
 import { UserAvatar } from "@/app/components/user-avatar";
-import { nanoid } from "nanoid";
 import {
   useRef,
   type Dispatch,
@@ -36,7 +35,7 @@ export function MessageInput({ setEntries }: Props) {
       return;
     }
 
-    const id = nanoid();
+    const id = crypto.randomUUID();
     const sentTime = Date.now();
 
     setEntries((entries) => [
