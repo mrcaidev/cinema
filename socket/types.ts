@@ -3,16 +3,28 @@ import type {
   RoomUser,
   ServerToClientEvents,
 } from "@/common/types";
-import type { DefaultEventsMap, Server } from "socket.io";
+import type { DefaultEventsMap, Server, Socket } from "socket.io";
+
+export type SocketData = {
+  room: string;
+  user: RoomUser;
+};
 
 export type IO = Server<
   ClientToServerEvents,
   ServerToClientEvents,
   DefaultEventsMap,
-  { room: string; user: RoomUser }
+  SocketData
+>;
+
+export type ServerSocket = Socket<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  DefaultEventsMap,
+  SocketData
 >;
 
 export type Context = {
   io: IO;
-  socket: IO["sockets"]["sockets"] extends Map<unknown, infer V> ? V : never;
+  socket: ServerSocket;
 };

@@ -1,6 +1,7 @@
 import { findRoomBySlug } from "@/database/room";
+import type { ExtendedError } from "socket.io";
 import * as v from "valibot";
-import type { Context } from "./types";
+import type { ServerSocket } from "../types";
 
 const schema = v.object({
   query: v.object({
@@ -14,11 +15,17 @@ const schema = v.object({
   }),
 });
 
-export async function handleHandshake({ socket }: Context) {
-  const { success, output } = await v.safeParseAsync(schema, socket.handshake);
+export async function auth(
+  socket: ServerSocket,
+  next: (error?: ExtendedError) => void,
+) {
+  const { success, issues, output } = await v.safeParseAsync(
+    schema,
+    socket.handshake,
+  );
 
   if (!success) {
-    socket.disconnect();
+    next(new Error(issues[0].message));
     return;
   }
 
@@ -30,14 +37,14 @@ export async function handleHandshake({ socket }: Context) {
   const room = await findRoomBySlug(roomSlug);
 
   if (!room) {
-    socket.disconnect();
+    next(new Error(`Room ${roomSlug} does not exist`));
     return;
   }
 
   const user = room.users.find((user) => user.id === userId);
 
   if (!user) {
-    socket.disconnect();
+    next(new Error("You have not yet been admitted to this room"));
     return;
   }
 
