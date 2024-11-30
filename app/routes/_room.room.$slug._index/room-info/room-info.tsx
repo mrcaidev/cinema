@@ -12,7 +12,13 @@ export function RoomInfo() {
           to="/"
           className="flex items-center gap-1 w-fit text-muted-foreground text-sm"
         >
-          <img src="/favicon.svg" alt="" width={24} height={24} />
+          <img
+            src="/favicon.svg"
+            alt=""
+            width={24}
+            height={24}
+            className="size-6"
+          />
         </Link>
         <div className="w-[1px] h-6 bg-muted" />
         <h1 className="text-lg font-medium">{room.name}</h1>
