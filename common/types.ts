@@ -92,11 +92,18 @@ type PlaylistUpvotedEvent = PlaylistUpvoteEvent & {
   upvotedUserIds: string[];
 };
 
+type PlaylistRemoveEvent = {
+  id: string;
+};
+
+type PlaylistRemovedEvent = PlaylistRemoveEvent;
+
 export type ClientToServerEvents = {
   ping: (callback: () => void) => void;
   "message:send": (event: MessageSendEvent, callback: () => void) => void;
   "playlist:import": (event: PlaylistImportEvent, callback: () => void) => void;
   "playlist:upvote": (event: PlaylistUpvoteEvent) => void;
+  "playlist:remove": (event: PlaylistRemoveEvent) => void;
 };
 
 export type ServerToClientEvents = {
@@ -105,4 +112,5 @@ export type ServerToClientEvents = {
   "message:sent": (event: MessageSentEvent) => void;
   "playlist:imported": (event: PlaylistImportedEvent) => void;
   "playlist:upvoted": (event: PlaylistUpvotedEvent) => void;
+  "playlist:removed": (event: PlaylistRemovedEvent) => void;
 };

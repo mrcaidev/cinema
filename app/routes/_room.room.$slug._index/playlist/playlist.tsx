@@ -42,6 +42,17 @@ export function Playlist() {
     });
   });
 
+  useSocketEvent("playlist:removed", (_, event) => {
+    const { id } = event;
+    setEntries((entries) => {
+      const index = entries.findIndex((entry) => entry.id === id);
+      if (index === -1) {
+        return entries;
+      }
+      return entries.toSpliced(index, 1);
+    });
+  });
+
   return (
     <section className="rounded-md bg-muted/50">
       <div className="flex justify-between items-center px-4 pt-3 pb-2">

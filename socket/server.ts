@@ -6,6 +6,7 @@ import { handleHandshake } from "./handshake";
 import { handleMessageSend } from "./message-send";
 import { handlePing } from "./ping";
 import { handlePlaylistImport } from "./playlist-import";
+import { handlePlaylistRemove } from "./playlist-remove";
 import { handlePlaylistUpvote } from "./playlist-upvote";
 import type { Context, IO } from "./types";
 
@@ -29,6 +30,9 @@ export function createServer(httpServer: HttpServer) {
     });
     socket.on("playlist:upvote", (...args) => {
       handlePlaylistUpvote(context, ...args);
+    });
+    socket.on("playlist:remove", (...args) => {
+      handlePlaylistRemove(context, ...args);
     });
     socket.on("disconnect", () => {
       handleDisconnect(context);

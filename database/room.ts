@@ -126,6 +126,16 @@ export async function upvotePlaylistEntry(
   return newUpvotedUserIds;
 }
 
+export async function removePlaylistEntry(
+  roomSlug: string,
+  playlistEntryId: string,
+) {
+  await collection.updateOne(
+    { slug: roomSlug },
+    { $pull: { playlist: { id: playlistEntryId } } },
+  );
+}
+
 function toRoomWithCredentials(doc: WithId<Doc>): RoomWithCredentials {
   const { _id, ...rest } = doc;
 

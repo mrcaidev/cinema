@@ -2,12 +2,12 @@ import { Button } from "@/app/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
-import { EllipsisVerticalIcon, ListXIcon } from "lucide-react";
+import { EllipsisVerticalIcon } from "lucide-react";
 import { useLoaderData } from "react-router";
 import type { loader } from "../route";
+import { RemoveButton } from "./remove-button";
 import type { PlaylistEntry } from "./types";
 import { UpvoteButton } from "./upvote-button";
 
@@ -43,10 +43,7 @@ export function PlaylistItem({ entry, index }: Props) {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <UpvoteButton id={entry.id} upvotedUserIds={entry.upvotedUserIds} />
-            <DropdownMenuItem className="cursor-pointer">
-              <ListXIcon />
-              Remove
-            </DropdownMenuItem>
+            <RemoveButton id={entry.id} />
           </DropdownMenuContent>
         </DropdownMenu>
       )}
