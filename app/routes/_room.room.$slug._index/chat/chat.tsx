@@ -1,3 +1,4 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { MessageSquareIcon } from "lucide-react";
 import { useState } from "react";
 import { useSocketEvent } from "../socket-context";
@@ -24,6 +25,8 @@ export function Chat() {
     setEntries((entries) => [...entries, { type: "message", ...event }]);
   });
 
+  const [listRef] = useAutoAnimate();
+
   return (
     <section className="row-span-2 flex flex-col py-3 rounded-md bg-muted/50">
       <div className="flex justify-between items-center px-4 mb-2">
@@ -34,7 +37,10 @@ export function Chat() {
         <Ping />
       </div>
       <hr className="mx-4" />
-      <ol className="grow px-4 overflow-auto scrollbar-thin scroll-thumb-rounded scrollbar-thumb-muted">
+      <ol
+        ref={listRef}
+        className="grow px-4 overflow-auto scrollbar-thin scroll-thumb-rounded scrollbar-thumb-muted"
+      >
         {entries.map((chatEntry) =>
           chatEntry.type === "join" ? (
             <li key={chatEntry.id} className="my-1 first:mt-3">
