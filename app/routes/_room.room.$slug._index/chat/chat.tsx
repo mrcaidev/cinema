@@ -28,8 +28,8 @@ export function Chat() {
   const [listRef] = useAutoAnimate();
 
   return (
-    <section className="row-span-2 flex flex-col py-3 rounded-md bg-muted/50">
-      <div className="flex justify-between items-center px-4 mb-2">
+    <section className="row-span-2 rounded-md bg-muted/50">
+      <div className="flex justify-between items-center px-4 pt-3 pb-2">
         <h2 className="flex items-center gap-2 text-lg font-medium">
           <MessageSquareIcon className="size-5" />
           Chat
@@ -39,7 +39,7 @@ export function Chat() {
       <hr className="mx-4" />
       <ol
         ref={listRef}
-        className="grow px-4 overflow-auto scrollbar-thin scroll-thumb-rounded scrollbar-thumb-muted"
+        className="h-[calc(100%-108px)] px-4 overflow-auto scrollbar-thin scroll-thumb-rounded scrollbar-thumb-muted"
       >
         {entries.map((chatEntry) =>
           chatEntry.type === "join" ? (
@@ -57,7 +57,7 @@ export function Chat() {
           ),
         )}
       </ol>
-      <div className="px-4 mt-2">
+      <div className="px-4 pt-2 pb-3">
         <MessageInput setEntries={setEntries} />
       </div>
     </section>

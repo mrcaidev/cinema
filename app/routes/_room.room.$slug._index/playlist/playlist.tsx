@@ -65,7 +65,7 @@ export function Playlist() {
       <hr className="mx-4" />
       <ol
         ref={playlistRef}
-        className="h-[calc(100%-48px)] px-4 overflow-auto scrollbar-thin scroll-thumb-rounded scrollbar-thumb-muted"
+        className="h-[calc(100%-50px)] px-4 overflow-auto scrollbar-thin scroll-thumb-rounded scrollbar-thumb-muted"
       >
         {entries[0] ? (
           <li className="mt-2">
