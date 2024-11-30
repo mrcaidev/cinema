@@ -23,17 +23,21 @@ const parseNoembedUrl: Parser = async (input) => {
 
   const json:
     | { error: string }
-    | { provider: string; title: string; thumbnail_url: string; html: string } =
-    await response.json();
+    | {
+        provider_name: string;
+        title: string;
+        thumbnail_url: string;
+        html: string;
+      } = await response.json();
 
   if ("error" in json) {
     return;
   }
 
-  const { provider, title, thumbnail_url, html } = json;
+  const { provider_name, title, thumbnail_url, html } = json;
 
   return {
-    provider,
+    provider: provider_name,
     title,
     thumbnailUrl: thumbnail_url,
     html: html

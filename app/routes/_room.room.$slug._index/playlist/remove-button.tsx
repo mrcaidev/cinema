@@ -19,7 +19,10 @@ export function RemoveButton({ id }: Props) {
   };
 
   return (
-    <DropdownMenuItem onSelect={remove} className="cursor-pointer">
+    <DropdownMenuItem
+      onSelect={remove}
+      className="!text-destructive cursor-pointer"
+    >
       <ListXIcon />
       Remove
     </DropdownMenuItem>

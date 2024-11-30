@@ -2,10 +2,11 @@ import { Button } from "@/app/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
-import { EllipsisVerticalIcon } from "lucide-react";
-import { useLoaderData } from "react-router";
+import { EllipsisVerticalIcon, ExternalLinkIcon } from "lucide-react";
+import { Link, useLoaderData } from "react-router";
 import type { loader } from "../route";
 import { RemoveButton } from "./remove-button";
 import type { PlaylistEntry } from "./types";
@@ -43,6 +44,12 @@ export function PlaylistItem({ entry, index }: Props) {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <UpvoteButton id={entry.id} upvotedUserIds={entry.upvotedUserIds} />
+            <DropdownMenuItem asChild className="cursor-pointer">
+              <Link to={entry.url}>
+                <ExternalLinkIcon />
+                Original video on {entry.provider}
+              </Link>
+            </DropdownMenuItem>
             <RemoveButton id={entry.id} />
           </DropdownMenuContent>
         </DropdownMenu>
