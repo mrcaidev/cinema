@@ -51,4 +51,6 @@ export async function auth(
   socket.join(roomSlug);
 
   socket.data = { room: roomSlug, user };
+
+  next();
 }
