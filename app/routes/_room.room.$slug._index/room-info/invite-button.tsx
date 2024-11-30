@@ -21,8 +21,10 @@ export function InviteButton() {
 
   const [invitationLink, setInvitationLink] = useState("");
   useEffect(() => {
-    setInvitationLink(`${window.location.origin}/room/${room.slug}/join`);
-  }, [room.slug]);
+    setInvitationLink(
+      `${window.location.origin}/room/${room.slug}/join${room.password ? `?pwd=${room.password}` : ""}`,
+    );
+  }, [room.slug, room.password]);
 
   const [copyState, setCopyState] = useState<"idle" | "success" | "error">(
     "idle",
