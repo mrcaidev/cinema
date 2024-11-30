@@ -1,9 +1,5 @@
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
-} from "@/common/types";
 import type { Server as HttpServer } from "node:http";
-import { Server, type DefaultEventsMap } from "socket.io";
+import { Server } from "socket.io";
 import { handleConnect } from "./connect";
 import { handleDisconnect } from "./disconnect";
 import { handleHandshake } from "./handshake";
@@ -11,15 +7,10 @@ import { handleMessageSend } from "./message-send";
 import { handlePing } from "./ping";
 import { handlePlaylistImport } from "./playlist-import";
 import { handlePlaylistUpvote } from "./playlist-upvote";
-import type { Context, SocketData } from "./types";
+import type { Context, IO } from "./types";
 
 export function createServer(httpServer: HttpServer) {
-  const io = new Server<
-    ClientToServerEvents,
-    ServerToClientEvents,
-    DefaultEventsMap,
-    SocketData
-  >(httpServer);
+  const io: IO = new Server(httpServer);
 
   io.on("connection", async (socket) => {
     const context: Context = { io, socket };
