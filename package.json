@@ -7,8 +7,7 @@
     "dev": "tsx entry.development.ts",
     "build": "react-router build",
     "start": "node entry.production.js",
-    "typegen": "react-router typegen",
-    "check": "biome check"
+    "check": "react-router typegen && tsc && biome check"
   },
   "dependencies": {
     "@fontsource-variable/nunito": "^5.1.0",
