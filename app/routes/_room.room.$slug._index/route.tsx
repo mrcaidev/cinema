@@ -69,8 +69,8 @@ export default function RoomPage() {
       <PlaylistProvider>
         <div className="flex flex-col xl:flex-row gap-4 min-h-screen p-4">
           <div className="grow-0 xl:grow space-y-4">
-            <Video />
             <RoomInfo />
+            <Video />
           </div>
           <div className="grow xl:grow-0 grid grid-rows-3 gap-4 xl:w-[420px] h-[calc(100vh-32px)]">
             <Playlist />
