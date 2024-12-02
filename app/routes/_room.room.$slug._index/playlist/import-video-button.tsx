@@ -75,6 +75,7 @@ export function ImportVideoButton() {
       title,
       html,
     });
+    setVideoUrl("");
     setIsImporting(false);
     setIsDrawerOpen(false);
   };
