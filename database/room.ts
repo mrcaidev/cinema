@@ -68,13 +68,17 @@ export async function upvotePlaylistVideo(
   playlistVideoId: string,
   user: RoomUser,
 ) {
+  // Find out the room by slug.
   const room = await collection.findOne({ slug: roomSlug });
 
   if (!room) {
     return;
   }
 
-  const playlistVideoIndex = room.playlist.findIndex(
+  // Find out the playlist video by id.
+  const { playlist } = room;
+
+  const playlistVideoIndex = playlist.findIndex(
     (video) => video.id === playlistVideoId,
   );
 
@@ -82,26 +86,46 @@ export async function upvotePlaylistVideo(
     return;
   }
 
-  const playlistVideo = room.playlist[playlistVideoIndex];
+  const playlistVideo = playlist[playlistVideoIndex];
 
   if (!playlistVideo) {
     return;
   }
 
-  const upvotedUserIdIndex = playlistVideo.upvotedUserIds.indexOf(user.id);
+  // Find out the old upvoted user ids.
+  const { upvotedUserIds } = playlistVideo;
+
+  // Update the upvoted user ids.
+  const upvotedUserIdIndex = upvotedUserIds.indexOf(user.id);
 
   const newUpvotedUserIds =
     upvotedUserIdIndex === -1
-      ? [...playlistVideo.upvotedUserIds, user.id]
-      : playlistVideo.upvotedUserIds.toSpliced(upvotedUserIdIndex, 1);
+      ? [...upvotedUserIds, user.id]
+      : upvotedUserIds.toSpliced(upvotedUserIdIndex, 1);
+
+  // Update the playlist.
+  const newPlaylist = playlist.toSpliced(playlistVideoIndex, 1, {
+    ...playlistVideo,
+    upvotedUserIds: newUpvotedUserIds,
+  });
+
+  // Sort the playlist.
+  const [currentVideo, ...candidateVideos] = newPlaylist;
+
+  if (!currentVideo) {
+    return;
+  }
+
+  const sortedPlaylist = [
+    currentVideo,
+    ...candidateVideos.toSorted(
+      (a, b) => b.upvotedUserIds.length - a.upvotedUserIds.length,
+    ),
+  ];
 
   await collection.updateOne(
     { slug: roomSlug },
-    {
-      $set: {
-        [`playlist.${playlistVideoIndex}.upvotedUserIds`]: newUpvotedUserIds,
-      },
-    },
+    { $set: { playlist: sortedPlaylist } },
   );
 
   return newUpvotedUserIds;
