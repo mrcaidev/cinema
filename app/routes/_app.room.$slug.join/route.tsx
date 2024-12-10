@@ -42,7 +42,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const me = await loadMe(request);
 
   if (me && room.users.some((user) => user.id === me.id)) {
-    return redirect(`/room/${slug}`) as never;
+    throw redirect(`/room/${slug}`);
   }
 
   // If the user has not logged in, and has already been admitted to the room.
@@ -51,7 +51,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const visitorId = visitorSession.get("id");
 
   if (!me && visitorId && room.users.some((user) => user.id === visitorId)) {
-    return redirect(`/room/${slug}`) as never;
+    throw redirect(`/room/${slug}`);
   }
 
   // Now, these users, regardless of whether they have logged in or not,
@@ -84,7 +84,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       role: "member",
     });
 
-    return redirect(`/room/${slug}`) as never;
+    throw redirect(`/room/${slug}`);
   }
 
   // If the user has not logged in, and is not a new visitor,
@@ -97,7 +97,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       role: "visitor",
     });
 
-    return redirect(`/room/${slug}`) as never;
+    throw redirect(`/room/${slug}`);
   }
 
   // If the user has not logged in, and is a new visitor,

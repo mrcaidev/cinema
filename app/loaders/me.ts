@@ -26,7 +26,7 @@ export async function loadMe<Strict extends boolean>(
 
   if (!meId) {
     if (strict) {
-      return redirect("/login") as never;
+      throw redirect("/login");
     }
 
     return null as unknown as User;
@@ -40,7 +40,7 @@ export async function loadMe<Strict extends boolean>(
     const headers = { "Set-Cookie": meCookie };
 
     if (strict) {
-      return redirect("/login", { headers }) as never;
+      throw redirect("/login", { headers });
     }
 
     return data(null, { headers }) as unknown as User;

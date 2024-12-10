@@ -19,7 +19,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const { success, output } = await v.safeParseAsync(schema, params);
 
   if (!success) {
-    return redirect(`/room/${params.slug}/join`) as never;
+    throw redirect(`/room/${params.slug}/join`);
   }
 
   const { slug } = output;
@@ -27,7 +27,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const room = await findRoomBySlug(slug);
 
   if (!room) {
-    return redirect(`/room/${slug}/join`) as never;
+    throw redirect(`/room/${slug}/join`);
   }
 
   const me = await loadMe(request);
@@ -36,7 +36,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     const user = room.users.find((user) => user.id === me.id);
 
     if (!user) {
-      return redirect(`/room/${slug}/join`) as never;
+      throw redirect(`/room/${slug}/join`);
     }
 
     return { room, me: user, role: user.role };
@@ -47,7 +47,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const visitorId = visitorSession.get("id");
 
   if (!visitorId) {
-    return redirect(`/room/${slug}/join`) as never;
+    throw redirect(`/room/${slug}/join`);
   }
 
   const visitor = room.users.find((user) => user.id === visitorId);
@@ -56,7 +56,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     return { room, me: visitor, role: "visitor" as const };
   }
 
-  return redirect(`/room/${slug}/join`) as never;
+  throw redirect(`/room/${slug}/join`);
 }
 
 export function meta({ data }: Route.MetaArgs) {

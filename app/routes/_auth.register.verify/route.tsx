@@ -74,7 +74,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   await verifyEmailVerificationById(emailVerificationId);
 
-  return redirect("/register/details") as never;
+  throw redirect("/register/details");
 }
 
 export default function VerifyOtpPage() {

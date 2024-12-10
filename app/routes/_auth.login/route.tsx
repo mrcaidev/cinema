@@ -53,7 +53,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   const meCookie = await commitMeSession(meSession);
 
-  return redirect("/", { headers: { "Set-Cookie": meCookie } }) as never;
+  throw redirect("/", { headers: { "Set-Cookie": meCookie } });
 }
 
 export function meta() {

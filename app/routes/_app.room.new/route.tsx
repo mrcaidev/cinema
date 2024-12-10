@@ -62,7 +62,7 @@ export async function action({ request }: Route.ActionArgs) {
     ],
   });
 
-  return redirect(`/room/${room.slug}`) as never;
+  throw redirect(`/room/${room.slug}`);
 }
 
 export function meta() {
