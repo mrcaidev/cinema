@@ -1,5 +1,6 @@
 import compression from "compression";
 import express from "express";
+import morgan from "morgan";
 import { createServer as createHttpServer } from "node:http";
 import { appServer } from "./build/server/index.js";
 import { createServer as createSocketServer } from "./build/server/index2.js";
@@ -14,6 +15,7 @@ createSocketServer(httpServer);
 
 expressServer.disable("x-powered-by");
 expressServer.use(compression());
+expressServer.use(morgan("tiny"));
 expressServer.use(
   "/assets",
   express.static("build/client/assets", { immutable: true, maxAge: "1y" }),
