@@ -31,7 +31,7 @@ expressServer.use(async (request, response, next) => {
   }
 });
 
-const port = Number.parseInt(process.env.PORT ?? "3000");
+const port = Number.parseInt(process.env.PORT || "3000");
 httpServer.listen(port, () => {
   console.log(
     `${new Date().toLocaleTimeString()} [entry] server is running on http://localhost:${port}`,

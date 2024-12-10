@@ -23,7 +23,7 @@ expressServer.use(
 expressServer.use(express.static("build/client", { maxAge: "1h" }));
 expressServer.use(appServer);
 
-const port = Number.parseInt(process.env.PORT ?? "3000");
+const port = Number.parseInt(process.env.PORT || "3000");
 httpServer.listen(port, () => {
   console.log(
     `${new Date().toLocaleTimeString()} [entry] server is running on port ${port}`,
